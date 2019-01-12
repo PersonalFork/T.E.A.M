@@ -1,0 +1,26 @@
+<ol class="breadcrumb">
+    <li class="breadcrumb-item">
+      <a [routerLink]="['/']" routerLinkActive="router-link-active" >Dashboard</a>
+    </li>
+    <li class="breadcrumb-item active">Task List</li>
+  </ol>
+<!-- Display data in tables -->
+<div class="table-responsive">
+    <table class="table table-striped table-sm">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <!-- <th>Header</th> -->
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of tasks">
+          <td>{{item.ID}}</td>
+          <td>{{item.FirstName}}</td>
+          <td>{{item.LastName}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

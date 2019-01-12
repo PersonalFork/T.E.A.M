@@ -1,0 +1,8 @@
+nav a div.logo {
+  background-image: url('../../../../assets/logo/logo.png');
+  height: 40px;
+  width: 40px;
+  background-size: 70px;
+  background-repeat: no-repeat;
+  background-position: 5px 8px;
+}
