@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using log4net;
+
+using Newtonsoft.Json;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,106 +22,161 @@ namespace TEAM.Common.Rest
     }
     public class RestClient
     {
-        public static async Task<ResponseDto<T>> GetDelete<T>(string url, MethodType methodType, Dictionary<string, KeyValuePair<string, string>> requestHeaders = null)
+        private static readonly ILog _logger = LogManager.GetLogger(typeof(RestClient));
+
+        public static async Task<ResponseDto<T>> GetDelete<T>(string getDeleteUri,
+            MethodType methodType, string authorizationToken = null)
         {
-            HttpClientHandler authtHandler = new HttpClientHandler()
+            _logger.Info(string.Format("Method {0} {1}", methodType.ToString(), getDeleteUri));
+
+            using (HttpClient client = new HttpClient())
             {
-                // Credentials = CredentialCache.DefaultNetworkCredentials
-                Credentials = new NetworkCredential("jchakraborty", "jchakraborty", "ids")
-            };
-            using (HttpClient client = new HttpClient(authtHandler))
-            {
-                // add request headers.
-                //if (requestHeaders != null && requestHeaders.ContainsKey("Authorization"))
-                //{
-                //    KeyValuePair<string, string> header = requestHeaders["Authorization"];
-                //    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(header.Key, header.Value);
-                //}
-                if (requestHeaders == null || !requestHeaders.ContainsKey("Accept"))
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                if (!string.IsNullOrEmpty(authorizationToken))
                 {
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorizationToken);
                 }
-                else if (requestHeaders != null && !requestHeaders.ContainsKey("Accept"))
+                HttpResponseMessage response = null;
+                try
                 {
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                    switch (methodType)
+                    {
+                        case MethodType.DELETE:
+                            response = await client.DeleteAsync(getDeleteUri);
+                            break;
+                        case MethodType.GET:
+                            response = await client.GetAsync(getDeleteUri);
+                            break;
+                        case MethodType.PUT:
+                        case MethodType.POST:
+                        default:
+                            throw new Exception("Put/Post is not supported by this method.");
+                    }
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        _logger.Error(string.Format("Method Failed : {0} {1} , Reason : {2}",
+                            methodType.ToString(), getDeleteUri, response.ReasonPhrase));
+                        return new ResponseDto<T>()
+                        {
+                            Data = default(T),
+                            IsSuccess = false,
+                            StatusCode = response.StatusCode,
+                            ErrorMessage = response.ReasonPhrase
+                        };
+                    }
+
+                    T result = JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);
+                    return new ResponseDto<T>()
+                    {
+                        Data = result,
+                        IsSuccess = true,
+                        StatusCode = response.StatusCode
+                    };
+                }
+                catch (HttpRequestException ex)
+                {
+                    _logger.Error(string.Format("Method Failed : {0} {1}", methodType.ToString(), getDeleteUri), ex);
+
+                    HttpStatusCode statusCode = default(HttpStatusCode);
+                    if (response != null)
+                    {
+                        statusCode = response.StatusCode;
+                    }
+                    return new ResponseDto<T>()
+                    {
+                        Data = default(T),
+                        ErrorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.Message,
+                        IsSuccess = false,
+                        StatusCode = statusCode
+                    };
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(string.Format("Method Failed : {0} {1}", methodType.ToString(), getDeleteUri), ex);
+
+                    HttpStatusCode statusCode = default(HttpStatusCode);
+                    if (response != null)
+                    {
+                        statusCode = response.StatusCode;
+                    }
+                    return new ResponseDto<T>()
+                    {
+                        Data = default(T),
+                        ErrorMessage = ex.Message,
+                        IsSuccess = false,
+                        StatusCode = statusCode
+                    };
+                }
+            }
+        }
+
+        public static async Task<ResponseDto<T>> PutPost<T, U>(string putPostUri, MethodType methodType, U data,
+            string authorizationToken = null, Dictionary<string, string> headers = null, bool serialize = true)
+        {
+            _logger.Info(string.Format("Method {0} {1}", methodType.ToString(), putPostUri));
+            using (HttpClient client = new HttpClient())
+            {
+                string json = string.Empty;
+                // additional control to put/post without deserialization.
+                if (serialize)
+                {
+                    json = JsonConvert.SerializeObject(data);
                 }
                 else
                 {
-                    KeyValuePair<string, string> header = requestHeaders["Accept"];
-                    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue(header.Value));
-                }
-
-                // process get/delete request.
-                HttpResponseMessage response = null;
-                try
-                {
-                    switch (methodType)
+                    if (data is string)
                     {
-                        case MethodType.PUT:
-                        case MethodType.POST:
-                            throw new Exception("Get/Delete is not supported by this method.");
-
-                        case MethodType.DELETE:
-                            response = await client.DeleteAsync(url);
-                            break;
-                        case MethodType.GET:
-                            response = await client.GetAsync(url);
-                            break;
-                        default:
-                            throw new Exception("Get/Delete is not supported by this method.");
+                        json = data.ToString();
                     }
-
-                    T result = JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);
-                    return new ResponseDto<T>()
-                    {
-                        Data = result,
-                        IsSuccess = true,
-                        StatusCode = response.StatusCode
-                    };
-                }
-                catch (Exception ex)
-                {
-                    return new ResponseDto<T>()
-                    {
-                        ErrorMessage = ex.Message,
-                        IsSuccess = false,
-                        StatusCode = response.StatusCode
-                    };
-                }
-            }
-        }
-
-        public static async Task<ResponseDto<T>> PutPost<T, U>(string postUri, MethodType methodType, U data, Dictionary<string, KeyValuePair<string, string>> requestHeaders = null)
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                // add request headers.
-                if (requestHeaders != null && requestHeaders.ContainsKey("Authorization"))
-                {
-                    KeyValuePair<string, string> header = requestHeaders["Authorization"];
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(header.Key, header.Value);
                 }
 
-                // process get/put request.
-                string json = JsonConvert.SerializeObject(data);
                 HttpContent content = new StringContent(json, Encoding.UTF8, "application/json");
+                if (!string.IsNullOrEmpty(authorizationToken))
+                {
+                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", authorizationToken);
+                }
+
                 HttpResponseMessage response = null;
                 try
                 {
+                    // add headers.
+                    if (headers != null && headers.Count > 0)
+                    {
+                        foreach (KeyValuePair<string, string> header in headers)
+                        {
+                            client.DefaultRequestHeaders.Add(header.Key, header.Value);
+                        }
+                    }
+
                     switch (methodType)
                     {
                         case MethodType.PUT:
-                            response = await client.PutAsync(postUri, content);
+                            response = await client.PutAsync(putPostUri, content);
                             break;
 
                         case MethodType.POST:
-                            response = await client.PostAsync(postUri, content);
+                            response = await client.PostAsync(putPostUri, content);
                             break;
 
                         case MethodType.DELETE:
                         case MethodType.GET:
                         default:
                             throw new Exception("Get/Delete is not supported by this method.");
+                    }
+
+                    if (!response.IsSuccessStatusCode)
+                    {
+                        _logger.Error(string.Format("Method Failed : {0} {1} {2}, Reason : ",
+                           methodType.ToString(), putPostUri, response.ReasonPhrase));
+
+                        return new ResponseDto<T>()
+                        {
+                            Data = default(T),
+                            IsSuccess = false,
+                            StatusCode = response.StatusCode,
+                            ErrorMessage = response.ReasonPhrase
+                        };
                     }
 
                     T result = JsonConvert.DeserializeObject<T>(response.Content.ReadAsStringAsync().Result);
@@ -129,27 +187,52 @@ namespace TEAM.Common.Rest
                         StatusCode = response.StatusCode
                     };
                 }
-                catch (Exception ex)
+                catch (HttpRequestException ex)
                 {
+                    _logger.Error(string.Format("Method Failed : {0} {1}", methodType.ToString(), putPostUri), ex);
+
+                    HttpStatusCode statusCode = default(HttpStatusCode);
+                    if (response != null)
+                    {
+                        statusCode = response.StatusCode;
+                    }
                     return new ResponseDto<T>()
                     {
+                        Data = default(T),
+                        ErrorMessage = ex.InnerException == null ? ex.Message : ex.InnerException.Message,
+                        IsSuccess = false,
+                        StatusCode = statusCode
+                    };
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error(string.Format("Method Failed : {0} {1}", methodType.ToString(), putPostUri), ex);
+
+                    HttpStatusCode statusCode = default(HttpStatusCode);
+                    if (response != null)
+                    {
+                        statusCode = response.StatusCode;
+                    }
+                    return new ResponseDto<T>()
+                    {
+                        Data = default(T),
                         ErrorMessage = ex.Message,
                         IsSuccess = false,
-                        StatusCode = response.StatusCode
+                        StatusCode = statusCode
                     };
                 }
             }
         }
 
-        public static async Task<ResponseDto<T>> PutPost<T, U>(string baseUri, string methodName, MethodType methodType, U data, Dictionary<string, KeyValuePair<string, string>> requestHeaders = null)
+        public static async Task<ResponseDto<T>> PutPost<T, U>(string baseUri, string methodName, MethodType methodType, U data, string authorizationToken)
         {
             string url = string.Join("/", baseUri, methodName);
-            ResponseDto<T> ret = await PutPost<T, U>(url, methodType, data, requestHeaders);
+            ResponseDto<T> ret = await PutPost<T, U>(url, methodType, data, authorizationToken);
 
             return ret;
         }
 
-        public static async Task<ResponseDto<T>> GetDelete<T>(string baseUri, MethodType methodType, bool prependQMark, Dictionary<string, string> parameters = null, Dictionary<string, KeyValuePair<string, string>> requestHeaders = null)
+        public static async Task<ResponseDto<T>> GetDelete<T>(string baseUri, MethodType methodType, bool prependQMark, Dictionary<string, string> parameters = null, string authorizationToken = null)
         {
             StringBuilder query = new StringBuilder();
             if (parameters != null && parameters.Any())
@@ -175,7 +258,7 @@ namespace TEAM.Common.Rest
                 }
             }
             baseUri = baseUri + query;
-            ResponseDto<T> ret = await GetDelete<T>(baseUri, methodType, requestHeaders);
+            ResponseDto<T> ret = await GetDelete<T>(baseUri, methodType, authorizationToken);
             return ret;
         }
     }
