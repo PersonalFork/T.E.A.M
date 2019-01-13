@@ -1,15 +1,15 @@
-﻿using TEAM.Business.Base;
-using TEAM.Business.Dto;
-using TEAM.Common;
-using TEAM.DAL.Repositories;
-using TEAM.Entity;
-
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 using NLog;
 
 using System;
 using System.Net;
+
+using TEAM.Business.Base;
+using TEAM.Business.Dto;
+using TEAM.Common;
+using TEAM.DAL.Repositories;
+using TEAM.Entity;
 
 namespace TEAM.Business
 {
@@ -42,16 +42,16 @@ namespace TEAM.Business
 
                 using (UserLoginRepository userLoginRepository = new UserLoginRepository())
                 {
-                    UserLogin userLoginEntity = userLoginRepository.Find(x => x.EmployeeId == userLogin.EmployeeId);
+                    UserLogin userLoginEntity = userLoginRepository.Find(x => string.Equals(x.UserId, userLogin.UserId));
                     if (userLoginEntity != null)
                     {
-                        throw new Exception("User with same employee id already exists.");
+                        throw new Exception("User with same user id already exists.");
                     }
                     else
                     {
                         userLoginEntity = new UserLogin()
                         {
-                            EmployeeId = userLogin.EmployeeId,
+                            UserId = userLogin.UserId,
                             Password = userLogin.Password.Encrypt(),
                             IsActive = true,
                             IsLocked = false,
@@ -66,7 +66,7 @@ namespace TEAM.Business
                     {
                         UserInfo userInfoEntity = new UserInfo()
                         {
-                            EmployeeId = userInfo.EmployeeId,
+                            UserId = userInfo.UserId,
                             EMail = userInfo.Email,
                             FirstName = userInfo.FirstName,
                             LastName = userInfo.LastName,
@@ -87,7 +87,7 @@ namespace TEAM.Business
             }
         }
 
-        public int RegisterServer(int serverId, int employeeId, string serverUserId, string serverPassword, string serverDomain)
+        public int RegisterServer(int serverId, string userId, string serverUserId, string serverPassword, string serverDomain)
         {
             TeamServer teamServerEntity;
             try
@@ -102,7 +102,7 @@ namespace TEAM.Business
                 }
                 using (UserInfoRepository userInfoRepository = new UserInfoRepository())
                 {
-                    UserInfo userInfoEntity = userInfoRepository.Find(x => x.EmployeeId == employeeId);
+                    UserInfo userInfoEntity = userInfoRepository.Find(x => x.UserId == userId);
                     if (userInfoEntity == null)
                     {
                         throw new Exception("Invalid user id");
@@ -110,10 +110,11 @@ namespace TEAM.Business
                 }
                 using (UserServerInfoRepository userServerInfoRepository = new UserServerInfoRepository())
                 {
-                    UserServerInfo userServerInfoEntity = userServerInfoRepository.Find(x => x.EmployeeId == employeeId && x.TfsId == serverId);
+                    UserServerInfo userServerInfoEntity = userServerInfoRepository.Find(
+                        x => x.UserId.ToUpper() == userId.ToUpper() && x.TfsId == serverId);
                     if (userServerInfoEntity != null)
                     {
-                        throw new Exception(string.Format("Server {0} is already registered to the user {1} .", serverId, employeeId));
+                        throw new Exception(string.Format("Server {0} is already registered to the user {1} .", serverId, userId));
                     }
 
                     // Dependency Injection of Team Service.
@@ -123,9 +124,9 @@ namespace TEAM.Business
 
                     userServerInfoEntity = new UserServerInfo()
                     {
-                        EmployeeId = employeeId,
+                        UserId = userId,
                         TfsId = serverId,
-                        UserId = serverUserId,
+                        TfsUserId = serverUserId,
                         CredentialHash = hash
                     };
                     return userServerInfoRepository.Insert(userServerInfoEntity);

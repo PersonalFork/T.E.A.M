@@ -222,6 +222,7 @@
     <Compile Include="Base\IUserManagementService.cs" />
     <Compile Include="Dto\UserInfoDto.cs" />
     <Compile Include="Dto\UserRegistrationDto.cs" />
+    <Compile Include="Dto\UserSessionDto.cs" />
     <Compile Include="Extensions\WorkItemExtensions.cs" />
     <Compile Include="ReportManagementService.cs" />
     <Compile Include="Dto\UserLoginDto.cs" />

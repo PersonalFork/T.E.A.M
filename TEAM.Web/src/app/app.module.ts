@@ -1,25 +1,25 @@
-import { DashboardService } from './components/dashboard/dashboard.service';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { FooterComponent } from './components/common/footer/footer.component';
-import { NavBarComponent } from './components/common/nav-bar/nav-bar.component';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { BrowserModule } from '@angular/platform-browser';
+import { RouterModule } from '@angular/router';
+import { AppComponent } from './app.component';
 import { ManageRolesComponent } from './components/admin/manage-roles/manage-roles.component';
 import { ManageUserComponent } from './components/admin/manage-user/manage-user.component';
 import { UserListComponent } from './components/admin/user-list/user-list.component';
+import { FooterComponent } from './components/common/footer/footer.component';
+import { NavBarComponent } from './components/common/nav-bar/nav-bar.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { DashboardService } from './components/dashboard/dashboard.service';
 import { AddTaskComponent } from './components/task/add-task/add-task.component';
 import { EditTaskComponent } from './components/task/edit-task/edit-task.component';
 import { TaskListComponent } from './components/task/task-list/task-list.component';
-import { ForgotPasswordComponent } from './components/user/forgot-password/forgot-password.component';
 import { ChangePasswordComponent } from './components/user/change-password/change-password.component';
-import { RegisterComponent } from './components/user/register/register.component';
-import { LogoutComponent } from './components/user/logout/logout.component';
+import { ForgotPasswordComponent } from './components/user/forgot-password/forgot-password.component';
 import { LoginComponent } from './components/user/login/login.component';
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
-
-import { AppComponent } from './app.component';
-import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { LogoutComponent } from './components/user/logout/logout.component';
+import { RegisterComponent } from './components/user/register/register.component';
 import { TaskService } from './services/task.service';
+
 
 @NgModule({
   declarations: [
@@ -45,8 +45,9 @@ import { TaskService } from './services/task.service';
     RouterModule.forRoot([
       {
         path: '',
-        component: DashboardComponent
+        component: LoginComponent
       },
+
       // login
       {
         path: 'dashboard',
@@ -72,6 +73,7 @@ import { TaskService } from './services/task.service';
         path: 'register',
         component: RegisterComponent
       },
+
       // tasks
       {
         path: 'task-list',

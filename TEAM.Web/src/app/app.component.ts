@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { NavbarService } from './services/navbar.service';
+import { log } from 'util';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,8 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'My Angular Project';
+  title = 'Task Effort Activity Manager';
+
+  constructor(private nav: NavbarService) {
+  }
 }

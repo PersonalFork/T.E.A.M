@@ -15,7 +15,7 @@ namespace TEAM.Test
         public void GetValidItemById()
         {
             WorkItemManagementService service = new WorkItemManagementService();
-            Business.Dto.WorkItemDto obj = service.GetWorkItemById(200052, 5, 51453312);
+            Business.Dto.WorkItemDto obj = service.GetWorkItemById(200052, 1, "1111111");
             Assert.IsNotNull(obj);
         }
 
@@ -28,7 +28,7 @@ namespace TEAM.Test
                 193846,
                 196787
             };
-            List<Business.Dto.WorkItemDto> obj = service.GetCurrentUserIncompleteItems(5, 51453312);
+            List<Business.Dto.WorkItemDto> obj = service.GetCurrentUserIncompleteItems(5, "1111111");
             Assert.IsTrue(obj.Count > 0);
         }
 
@@ -37,7 +37,7 @@ namespace TEAM.Test
         public void GetInvalidItemById()
         {
             WorkItemManagementService service = new WorkItemManagementService();
-            Business.Dto.WorkItemDto obj = service.GetWorkItemById(1913745, 5, 51453312);
+            Business.Dto.WorkItemDto obj = service.GetWorkItemById(1913745, 5, "1111111");
             Assert.IsNull(obj);
         }
         #endregion
@@ -63,7 +63,7 @@ namespace TEAM.Test
         public void RemoveTfsServer()
         {
             TeamServerManagementService service = new TeamServerManagementService();
-            int code = service.DeleteTeamServer(4);
+            int code = service.DeleteTeamServer(2);
             Assert.IsTrue(code != 0);
         }
     }

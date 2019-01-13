@@ -125,7 +125,7 @@ namespace TEAM.Business
         }
 
         [Obsolete("This method has been marked as obsolete. " +
-            "Please use Authenticate(int tfsId, string credentialHash) instead.")]
+            "Use Authenticate(int tfsId, string credentialHash) instead.")]
         public bool Authenticate(string url, string userId, string password, string domain)
         {
             try

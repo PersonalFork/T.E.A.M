@@ -7,6 +7,7 @@ namespace TEAM.Business.Base
     public interface ITeamServerManagementService
     {
         int AddTeamServer(string name, string url, int port);
+        bool Authenticate(int tfsId, string credentialHash);
         [Obsolete("This method has been marked as obsolete. " +
             "Please use Authenticate(int tfsId, string credentialHash) instead.")]
         bool Authenticate(string url, string userId, string password, string domain);

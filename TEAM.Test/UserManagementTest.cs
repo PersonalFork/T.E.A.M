@@ -16,12 +16,12 @@ namespace TEAM.Test
         {
             UserLoginDto userLoginDto = new UserLoginDto()
             {
-                EmployeeId = 1111111,
+                UserId = "1111111",
                 Password = "Nec@12345"
             };
             UserInfoDto userInfoDto = new UserInfoDto()
             {
-                EmployeeId = 1111111,
+                UserId = "1111111",
                 Email = "jashobanta.c@nec.com",
                 FirstName = "Jashobanta",
                 LastName = "Chakraborty",
@@ -32,7 +32,6 @@ namespace TEAM.Test
                 LoginInfo = userLoginDto,
                 UserInfo = userInfoDto
             };
-
             UserManagementService userManagementService = new UserManagementService();
             userManagementService.RegisterUser(userRegistrationDto);
         }
@@ -48,7 +47,7 @@ namespace TEAM.Test
         public void AddServer()
         {
             UserManagementService service = new UserManagementService();
-            int ret = service.RegisterServer(4, 51453312, Settings.userId, Settings.password, Settings.domain);
+            int ret = service.RegisterServer(1, "1111111", Settings.userId, Settings.password, Settings.domain);
             Assert.IsFalse(ret == 0);
         }
 
@@ -57,7 +56,7 @@ namespace TEAM.Test
         public void AddServerWithWrongTFSCredentials()
         {
             UserManagementService service = new UserManagementService();
-            service.RegisterServer(4, 51453312, Settings.userId, Settings.password, Settings.domain);
+            service.RegisterServer(4, "1111111", Settings.userId, Settings.password, Settings.domain);
         }
 
     }

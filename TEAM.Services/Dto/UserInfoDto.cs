@@ -4,14 +4,14 @@ namespace TEAM.Business.Dto
 {
     public class UserInfoDto : DTO
     {
-        private int _employeeId;
-        public int EmployeeId
+        private string _userId;
+        public string UserId
         {
-            get => _employeeId;
+            get => _userId;
             set
             {
-                _employeeId = value;
-                RaisePropertyChanged(nameof(EmployeeId));
+                _userId = value;
+                RaisePropertyChanged(nameof(UserId));
             }
         }
 

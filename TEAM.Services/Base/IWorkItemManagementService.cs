@@ -6,8 +6,8 @@ namespace TEAM.Business.Base
 {
     public interface IWorkItemManagementService
     {
-        WorkItemDto GetWorkItemById(int taskId, int serverId, int employeeId);
+        WorkItemDto GetWorkItemById(int taskId, int serverId, string userId);
 
-        List<WorkItemDto> GetCurrentUserIncompleteItems(int serverId, int employeeId);
+        List<WorkItemDto> GetCurrentUserIncompleteItems(int serverId, string userId);
     }
 }

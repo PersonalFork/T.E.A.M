@@ -1,4 +1,4 @@
-<app-nav-bar></app-nav-bar>
+<app-nav-bar *ngIf="nav.visible"></app-nav-bar>
 <!-- Begin page content -->
 <main role="main" class="main container-fluid">
   <router-outlet></router-outlet>

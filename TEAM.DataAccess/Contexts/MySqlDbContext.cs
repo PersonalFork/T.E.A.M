@@ -1,5 +1,7 @@
-﻿using System.Data.Entity;
-using MySql.Data.EntityFramework;
+﻿using MySql.Data.EntityFramework;
+
+using System.Data.Entity;
+
 using TEAM.DAL.Migrations;
 using TEAM.Entity;
 
@@ -8,6 +10,8 @@ namespace TEAM.DAL.Contexts
     [DbConfigurationType(typeof(MySqlEFConfiguration))]
     public class MySqlDbContext : DbContext, IDbContext
     {
+        // Use EntityFramework\Update-Database -Verbose in Package Manager Console.
+
         /// <summary>
         /// Initializes a new instance of the <see cref="MySqlDbContext" /> class.
         /// </summary>
