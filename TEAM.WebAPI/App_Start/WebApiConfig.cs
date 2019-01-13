@@ -1,7 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
+﻿using System.Web.Http;
+
+using TEAM.Business;
+using TEAM.Business.Base;
+using TEAM.WebAPI;
+
+using Unity;
 
 namespace TEAM.Web
 {
@@ -10,6 +13,9 @@ namespace TEAM.Web
         public static void Register(HttpConfiguration config)
         {
             // Web API configuration and services
+            UnityContainer container = new UnityContainer();
+            RegisterTypes(container);
+            config.DependencyResolver = new UnityResolver(container);
 
             // Web API routes
             config.MapHttpAttributeRoutes();
@@ -19,6 +25,11 @@ namespace TEAM.Web
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+        }
+
+        private static void RegisterTypes(UnityContainer container)
+        {
+            container.RegisterType<ITeamServerManagementService, TeamServerManagementService>();
         }
     }
 }
