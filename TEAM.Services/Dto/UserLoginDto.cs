@@ -1,10 +1,12 @@
-﻿using DTO = TEAM.Business.Dto.Base.Dto;
+﻿using Newtonsoft.Json;
+using DTO = TEAM.Business.Dto.Base.Dto;
 
 namespace TEAM.Business.Dto
 {
     public class UserLoginDto : DTO
     {
         private string _userId;
+        [JsonProperty("userid")]
         public string UserId
         {
             get => _userId;
@@ -16,6 +18,7 @@ namespace TEAM.Business.Dto
         }
 
         private string _password;
+        [JsonProperty("password")]
         public string Password
         {
             get => _password;

@@ -19,6 +19,7 @@ import { LoginComponent } from './components/user/login/login.component';
 import { LogoutComponent } from './components/user/logout/logout.component';
 import { RegisterComponent } from './components/user/register/register.component';
 import { TaskService } from './services/task.service';
+import { HttpModule } from '@angular/http';
 
 
 @NgModule({
@@ -42,6 +43,7 @@ import { TaskService } from './services/task.service';
   imports: [
     BrowserModule,
     FormsModule,
+    HttpModule,
     RouterModule.forRoot([
       {
         path: '',

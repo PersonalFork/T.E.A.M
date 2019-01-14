@@ -34,6 +34,7 @@
     <None Remove=".gitignore" />
     <None Remove="angular-project.rar" />
     <None Remove="README.md" />
+    <None Remove="src\app\models\loginDto.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -44,6 +45,10 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="MySql.Data" Version="8.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="src\app\models\loginDto.ts" />
   </ItemGroup>
 
 </Project>

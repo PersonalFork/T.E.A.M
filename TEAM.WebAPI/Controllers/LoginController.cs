@@ -1,7 +1,9 @@
-﻿using System.Net;
+﻿using log4net;
+using System;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-
+using TEAM.Business;
 using TEAM.Business.Base;
 using TEAM.Business.Dto;
 
@@ -12,10 +14,19 @@ namespace TEAM.WebAPI.Controllers
     [RoutePrefix("api/login")]
     public class LoginController : ApiController
     {
-        [Dependency]
-        private ITeamServerManagementService TeamServerManagementService { get; set; }
+        public static readonly ILog _loggger = LogManager.GetLogger(typeof(LoginController));
+        private ILoginService _loginService;
+
+        //[Dependency]
+        //private ILoginService LoginService { get; set; }
+
+        public LoginController()
+        {
+            _loginService = new LoginService();
+        }
 
         [HttpPost]
+        [Route("Test")]
         public HttpResponseMessage Login([FromBody]UserLoginDto userLoginDto)
         {
             if (userLoginDto == null)
@@ -24,7 +35,7 @@ namespace TEAM.WebAPI.Controllers
             }
             if (string.IsNullOrEmpty(userLoginDto.UserId))
             {
-                HttpResponseMessage response = Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Employee Id cannot be empty");
+                HttpResponseMessage response = Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User Id cannot be empty");
                 return response;
             }
             if (string.IsNullOrEmpty(userLoginDto.Password))
@@ -35,13 +46,14 @@ namespace TEAM.WebAPI.Controllers
 
             try
             {
-                TeamServerManagementService.Authenticate("ab", "ab", "ab", "ab");
+                UserSessionDto userSession = _loginService.Login(userLoginDto.UserId, userLoginDto.Password);
+                return Request.CreateResponse(HttpStatusCode.OK, userSession);
             }
-            catch
+            catch (Exception ex)
             {
-
+                _loggger.Error(ex);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
-            return null;
         }
     }
 }

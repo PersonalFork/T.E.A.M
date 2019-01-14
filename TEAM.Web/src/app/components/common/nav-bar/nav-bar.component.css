@@ -1,3 +1,9 @@
+.header {
+  width: 100%;
+  position: relative !important;
+  float: left;
+}
+
 nav a div.logo {
   background-image: url('../../../../assets/logo/logo.png');
   height: 40px;

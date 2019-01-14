@@ -1,4 +1,6 @@
 main.main {
   /* padding: 50px; */
-  padding-top: 60px;
+  height: calc(100% - 200px);
+  width: 100%;
+  float: left;
 }

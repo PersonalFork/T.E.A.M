@@ -216,6 +216,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\ILoginService.cs" />
     <Compile Include="Base\IReportManagementService.cs" />
     <Compile Include="Base\IWorkItemManagementService.cs" />
     <Compile Include="Base\ITeamServerManagementService.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="Dto\UserRegistrationDto.cs" />
     <Compile Include="Dto\UserSessionDto.cs" />
     <Compile Include="Extensions\WorkItemExtensions.cs" />
+    <Compile Include="LoginService.cs" />
     <Compile Include="ReportManagementService.cs" />
     <Compile Include="Dto\UserLoginDto.cs" />
     <Compile Include="WorkItemManagementService.cs" />

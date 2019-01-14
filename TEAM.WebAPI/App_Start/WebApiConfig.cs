@@ -1,14 +1,11 @@
 ﻿using System.Web.Http;
-
-using TEAM.Business;
-using TEAM.Business.Base;
 using TEAM.WebAPI;
 
 using Unity;
 
 namespace TEAM.Web
 {
-    public static class WebApiConfig
+    public static partial class WebApiConfig
     {
         public static void Register(HttpConfiguration config)
         {
@@ -25,11 +22,6 @@ namespace TEAM.Web
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
-        }
-
-        private static void RegisterTypes(UnityContainer container)
-        {
-            container.RegisterType<ITeamServerManagementService, TeamServerManagementService>();
         }
     }
 }
