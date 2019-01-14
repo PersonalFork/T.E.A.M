@@ -5,6 +5,6 @@ Git Repository for the tool Task-Effort-Activity-Manager that is created to mana
 ## Technology Used
 
 <b>Front End</b> : Angular v6.1.8<br/>
-<b>Back End </b> : C# 
-<b>Database</b>  : MySql
-<b>ORM</b>       : Entity Framework 6
+<b>Back End </b> : C#<br/>
+<b>Database</b>  : MySql<br/>
+<b>ORM</b>       : Entity Framework 6<br/>
