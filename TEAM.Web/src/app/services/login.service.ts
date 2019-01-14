@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
+import { LoginDto } from '../models/loginDto';
 
 
 @Injectable({
@@ -17,10 +18,7 @@ export class LoginService {
   login(userId: string, password: string) {
     let options = new Headers();
     options.set('Content-Type', 'application/json');
-    let loginDto = {
-      userid: userId,
-      password: password
-    }
+    let loginDto = new LoginDto(userId, password);
     return this.http.post(this.baseUri + "login/Test", JSON.stringify(loginDto), { headers: options });
   }
 }

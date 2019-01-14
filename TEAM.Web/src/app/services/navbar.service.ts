@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { UserSession } from '../models/userSession';
 
 @Injectable({
   providedIn: 'root'
@@ -9,12 +10,11 @@ export class NavbarService {
   userName: string;
 
   constructor() {
-    debugger;
     this.visible = true;
     let userSessionInfoData = localStorage.getItem("userSessionInfo");
     if (userSessionInfoData != null) {
-      let userSessionInfo = JSON.parse(userSessionInfoData);
-      this.userName = userSessionInfo.User.FirstName + " " + userSessionInfo.User.LastName;
+      let userSessionInfo: UserSession = JSON.parse(userSessionInfoData);
+      this.userName = userSessionInfo.firstName + " " + userSessionInfo.lastName;
       this.visible = true;
     }
     else {

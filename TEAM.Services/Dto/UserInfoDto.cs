@@ -1,10 +1,13 @@
-﻿using DTO = TEAM.Business.Dto.Base.Dto;
+﻿using Newtonsoft.Json;
+
+using DTO = TEAM.Business.Dto.Base.Dto;
 
 namespace TEAM.Business.Dto
 {
     public class UserInfoDto : DTO
     {
         private string _userId;
+        [JsonProperty("userId")]
         public string UserId
         {
             get => _userId;
@@ -16,6 +19,7 @@ namespace TEAM.Business.Dto
         }
 
         private string _email;
+        [JsonProperty("email")]
         public string Email
         {
             get => _email;
@@ -27,6 +31,7 @@ namespace TEAM.Business.Dto
         }
 
         private string _firstName;
+        [JsonProperty("firstName")]
         public string FirstName
         {
             get => _firstName;
@@ -38,6 +43,7 @@ namespace TEAM.Business.Dto
         }
 
         private string _lastName;
+        [JsonProperty("lastName")]
         public string LastName
         {
             get => _lastName;
@@ -49,6 +55,7 @@ namespace TEAM.Business.Dto
         }
 
         private string _gender;
+        [JsonProperty("gender")]
         public string Gender
         {
             get => _gender;

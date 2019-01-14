@@ -1,5 +1,10 @@
 export class LoginDto {
-  constructor(userid: string, password: string, domain: string) {
 
+  userid: string;
+  password: string;
+
+  constructor(userid: string, password: string) {
+    this.userid = userid;
+    this.password = password;
   }
 }

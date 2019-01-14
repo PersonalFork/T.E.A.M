@@ -1,8 +1,8 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { NavbarService } from '../../../services/navbar.service';
+import { UserSession } from '../../../models/userSession';
 import { LoginService } from '../../../services/login.service';
-import { log, debug } from 'util';
+import { NavbarService } from '../../../services/navbar.service';
 
 @Component({
   selector: 'app-login',
@@ -28,10 +28,16 @@ export class LoginComponent implements OnInit {
         response => {
           this.nav.show();
           debugger;
-          let userSessionInfo = response.json();
-          localStorage.setItem("userSessionInfo", JSON.stringify(userSessionInfo));
-          this.nav.userName = userSessionInfo.User.FirstName + " " + userSessionInfo.User.LastName;
-          this.router.navigate(['/dashboard'], {});
+          let userSessionResponse = response.json();
+          let userSession = new UserSession(
+            userSessionResponse.sessionId,
+            userSessionResponse.userId,
+            userSessionResponse.user.firstName,
+            userSessionResponse.user.lastName
+          );
+          localStorage.setItem("userSessionInfo", JSON.stringify(userSession));
+          this.nav.userName = userSession.firstName + " " + userSession.lastName;
+          this.router.navigate(['/server-list'], {});
         },
         error => {
           console.log(error);

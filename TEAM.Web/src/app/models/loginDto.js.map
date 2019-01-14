@@ -1,1 +1,1 @@
-{"version":3,"file":"loginDto.js","sourceRoot":"","sources":["loginDto.ts"],"names":[],"mappings":";;AAAA;IACE,kBAAY,MAAc,EAAE,QAAgB,EAAE,MAAc;IAE5D,CAAC;IACH,eAAC;AAAD,CAAC,AAJD,IAIC;AAJY,4BAAQ"}
+{"version":3,"file":"loginDto.js","sourceRoot":"","sources":["loginDto.ts"],"names":[],"mappings":";;AAAA;IAKE,kBAAY,MAAc,EAAE,QAAgB;QAC1C,IAAI,CAAC,MAAM,GAAG,MAAM,CAAC;QACrB,IAAI,CAAC,QAAQ,GAAG,QAAQ,CAAC;IAC3B,CAAC;IACH,eAAC;AAAD,CAAC,AATD,IASC;AATY,4BAAQ"}

@@ -20,6 +20,7 @@ import { LogoutComponent } from './components/user/logout/logout.component';
 import { RegisterComponent } from './components/user/register/register.component';
 import { TaskService } from './services/task.service';
 import { HttpModule } from '@angular/http';
+import { ServerListComponent } from './components/user/server-list/server-list.component';
 
 
 @NgModule({
@@ -38,7 +39,8 @@ import { HttpModule } from '@angular/http';
     ManageRolesComponent,
     NavBarComponent,
     FooterComponent,
-    DashboardComponent
+    DashboardComponent,
+    ServerListComponent
   ],
   imports: [
     BrowserModule,
@@ -76,6 +78,12 @@ import { HttpModule } from '@angular/http';
         component: RegisterComponent
       },
 
+      // server
+      {
+        path: 'server-list',
+        component: ServerListComponent
+      },
+
       // tasks
       {
         path: 'task-list',
@@ -97,4 +105,4 @@ import { HttpModule } from '@angular/http';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
