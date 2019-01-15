@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net;
-
-using Microsoft.TeamFoundation;
+﻿using Microsoft.TeamFoundation;
 using Microsoft.TeamFoundation.Client;
 using Microsoft.TeamFoundation.WorkItemTracking.Client;
 using Microsoft.VisualStudio.Services.Client;
 using Microsoft.VisualStudio.Services.Common;
+
+using Newtonsoft.Json;
+
+using NLog;
+
+using System;
+using System.Collections.Generic;
+using System.Net;
 
 using TEAM.Business.Base;
 using TEAM.Common;
 using TEAM.Common.Exceptions;
 using TEAM.DAL.Repositories;
 using TEAM.Entity;
-
-using Newtonsoft.Json;
-
-using NLog;
 
 using WindowsCredential = Microsoft.VisualStudio.Services.Common.WindowsCredential;
 using WorkItem = Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem;
@@ -26,6 +26,8 @@ namespace TEAM.Business
     public class TeamServerManagementService : ITeamServerManagementService
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
+        #region ITeamServerManagementService Implementation.
 
         #region Team Server Management.
 
@@ -300,6 +302,8 @@ namespace TEAM.Business
                 throw;
             }
         }
+        #endregion 
+
         #endregion
     }
 }

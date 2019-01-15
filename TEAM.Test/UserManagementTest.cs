@@ -59,5 +59,12 @@ namespace TEAM.Test
             service.RegisterServer(4, "1111111", Settings.userId, Settings.password, Settings.domain);
         }
 
+        [TestMethod]
+        public void GetValidUserServerList()
+        {
+            UserManagementService service = new UserManagementService();
+            System.Collections.Generic.List<UserServerDto> servers = service.GetUserServerList("1111111");
+            Assert.IsTrue(servers.Count > 0);
+        }
     }
 }

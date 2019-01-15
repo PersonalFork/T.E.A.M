@@ -6,5 +6,6 @@ namespace TEAM.Business.Base
     {
         bool Logout();
         UserSessionDto Login(string userId, string password);
+        UserSessionDto GetUserSessionBySessionId(string sessionId);
     }
 }

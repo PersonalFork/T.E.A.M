@@ -3,6 +3,7 @@
 using NLog;
 
 using System;
+using System.Collections.Generic;
 using System.Net;
 
 using TEAM.Business.Base;
@@ -15,12 +16,23 @@ namespace TEAM.Business
 {
     public class UserManagementService : IUserManagementService
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        #region Private Variable Declarations.
+
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly TeamServerManagementService _authenticationService;
+
+        #endregion
+
+        #region Constructor.
+
         public UserManagementService()
         {
             _authenticationService = new TeamServerManagementService();
         }
+
+        #endregion
+
+        #region IUserManagementService Implementation.
 
         public int RegisterUser(UserRegistrationDto userRegistrationDto)
         {
@@ -82,9 +94,51 @@ namespace TEAM.Business
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                _logger.Error(ex);
                 throw;
             }
+        }
+
+        public List<UserServerDto> GetUserServerList(string userId)
+        {
+            List<UserServerDto> userServerList = new List<UserServerDto>();
+            List<UserServerDto> dtoList = new List<UserServerDto>();
+            try
+            {
+                using (UserServerInfoRepository repository = new UserServerInfoRepository())
+                {
+                    System.Linq.IQueryable<UserServerInfo> servers = repository.Filter(x => x.UserId == userId);
+                    foreach (UserServerInfo server in servers)
+                    {
+                        UserServerDto dto = new UserServerDto
+                        {
+                            TfsId = server.TfsId,
+                            UserId = server.UserId
+                        };
+                        dtoList.Add(dto);
+                    }
+                }
+                using (TeamServerRepository serverRepository = new TeamServerRepository())
+                {
+                    foreach (UserServerDto server in dtoList)
+                    {
+                        TeamServer teamServer = serverRepository.Find(x => x.Id == server.TfsId);
+                        if (teamServer != null)
+                        {
+                            server.ServerName = teamServer.Name;
+                            server.ServerUrl = teamServer.Url;
+
+                            userServerList.Add(server);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Failed to get servers for User-Id " + userId);
+                throw;
+            }
+            return userServerList;
         }
 
         public int RegisterServer(int serverId, string userId, string serverUserId, string serverPassword, string serverDomain)
@@ -134,9 +188,11 @@ namespace TEAM.Business
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                _logger.Error(ex);
                 throw;
             }
         }
+
+        #endregion
     }
 }

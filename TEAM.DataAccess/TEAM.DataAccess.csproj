@@ -53,6 +53,7 @@
     <Compile Include="Repositories\UserInfoRepository.cs" />
     <Compile Include="Repositories\UserLoginRepository.cs" />
     <Compile Include="Repositories\UserServerInfoRepository.cs" />
+    <Compile Include="Repositories\UserSessionRepository.cs" />
     <Compile Include="Repositories\WorkItemRepository.cs" />
     <Compile Include="Repositories\TeamServerRepository.cs" />
   </ItemGroup>

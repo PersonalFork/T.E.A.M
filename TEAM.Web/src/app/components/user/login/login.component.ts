@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { UserSession } from '../../../models/userSession';
 import { LoginService } from '../../../services/login.service';
 import { NavbarService } from '../../../services/navbar.service';
+import { SessionData } from '../../../common/data';
 
 @Component({
   selector: 'app-login',
@@ -21,13 +22,16 @@ export class LoginComponent implements OnInit {
   password: string;
   errorMessage: string = "";
 
+  ngOnInit() {
+    this.validateLogin();
+  }
+
   doLogin() {
     this.errorMessage = "";
     this.loginService.login(this.userId, this.password)
       .subscribe(
         response => {
           this.nav.show();
-          debugger;
           let userSessionResponse = response.json();
           let userSession = new UserSession(
             userSessionResponse.sessionId,
@@ -35,6 +39,7 @@ export class LoginComponent implements OnInit {
             userSessionResponse.user.firstName,
             userSessionResponse.user.lastName
           );
+          SessionData.userSession = userSession;
           localStorage.setItem("userSessionInfo", JSON.stringify(userSession));
           this.nav.userName = userSession.firstName + " " + userSession.lastName;
           this.router.navigate(['/server-list'], {});
@@ -45,5 +50,11 @@ export class LoginComponent implements OnInit {
         }
       );
   }
-  ngOnInit() { }
+
+  validateLogin() {
+    if (SessionData.getUserSession() != null) {
+      this.nav.show();
+      this.router.navigate(['/server-list'], {});
+    };
+  }
 }

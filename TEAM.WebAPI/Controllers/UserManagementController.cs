@@ -1,25 +1,55 @@
-﻿using System;
+﻿using log4net;
+using System;
+using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Web.Http;
-using NEC.TEAM.Common.Interfaces;
-using NEC.TEAM.WebAPI.Models;
 
-namespace NEC.TEAM.Web.Controllers
+using TEAM.Business;
+using TEAM.Business.Base;
+using TEAM.Business.Dto;
+using TEAM.WebAPI.Common;
+using TEAM.WebAPI.Filters;
+
+namespace TEAM.WebAPI.Controllers
 {
-    [RoutePrefix("team/userManagement")]
-    public class UserManagementController : ApiController, IUserManagementController
+    [RoutePrefix("api/userMgmt")]
+    public class UserManagementController : ApiController
     {
-        [Route("Test", Name = "Test")]
-        [HttpGet]
-        public string Test()
+        public static readonly ILog _loggger = LogManager.GetLogger(typeof(UserManagementController));
+        private readonly IUserManagementService _userManagementService;
+
+        public UserManagementController()
         {
-            return String.Format("{0} {1} ", DateTime.Now.ToShortDateString(), DateTime.Now.ToShortTimeString());
+            _userManagementService = new UserManagementService();
         }
 
-        [Route("Register", Name = "RegisterUser")]
-        [HttpPost]
-        public string RegisterUser(UserDto user)
+        [HttpGet]
+        [Route("getServersByUserId")]
+        [Authentication]
+        public HttpResponseMessage GetServersByUserId()
         {
-            return String.Format("{0} {1} ", user.FirstName, user.LastName);
+            UserSessionDto userSession = Request.GetUserSession();
+            if (userSession == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "User Session not found.");
+            }
+            string userId = userSession.User.UserId;
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "User Id cannot be empty.");
+            }
+            try
+            {
+                List<UserServerDto> serverList = _userManagementService.GetUserServerList(userId);
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, serverList);
+                return response;
+            }
+            catch (Exception ex)
+            {
+                _loggger.Error(ex);
+                return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
         }
     }
 }

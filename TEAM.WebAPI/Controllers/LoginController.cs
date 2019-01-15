@@ -2,12 +2,12 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web.Http;
 using TEAM.Business;
 using TEAM.Business.Base;
 using TEAM.Business.Dto;
-
-using Unity.Attributes;
+using TEAM.WebAPI.Common;
 
 namespace TEAM.WebAPI.Controllers
 {
@@ -26,7 +26,7 @@ namespace TEAM.WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("Test")]
+        [Route("doLogin")]
         public HttpResponseMessage Login([FromBody]UserLoginDto userLoginDto)
         {
             if (userLoginDto == null)
@@ -47,7 +47,17 @@ namespace TEAM.WebAPI.Controllers
             try
             {
                 UserSessionDto userSession = _loginService.Login(userLoginDto.UserId, userLoginDto.Password);
-                return Request.CreateResponse(HttpStatusCode.OK, userSession);
+
+                // Attach a session cookie to response.
+                CookieHeaderValue cookie = new CookieHeaderValue(Constants.SESSION_KEY, userSession.SessionId)
+                {
+                    Expires = DateTimeOffset.Now.AddDays(1),
+                    Domain = Request.RequestUri.Host,
+                    Path = "/"
+                };
+                HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, userSession);
+                response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+                return response;
             }
             catch (Exception ex)
             {

@@ -1,3 +1,24 @@
-<p>
-  server-list works!
-</p>
+<ol class="breadcrumb">
+  <li class="breadcrumb-item">
+    <a href="#">Dashboard</a>
+  </li>
+  <!-- <li class="breadcrumb-item active">Overview</li> -->
+</ol>
+<div class="card" *ngIf="!isServerConfigured">
+  <div class="card-body">
+    <h5 class="card-title">No Server Configured</h5>
+    <p class="card-text">No Server has been configured. Please configure a server by clicking the Configure Server button.</p>
+    <a href="#" class="btn btn-primary">Configure Server</a>
+  </div>
+</div>
+<div *ngIf="isServerConfigured">
+  <div class="server float-left mx-2" *ngFor="let server of configuredServers">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Server : {{server.serverName}}</h5>
+        <p class="card-text"><b>URL : </b> {{server.serverUrl}}</p>
+        <a href="#" class="btn btn-primary">Browse Tasks</a>
+      </div>
+    </div>
+  </div>
+</div>

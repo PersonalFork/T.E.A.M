@@ -4,12 +4,12 @@
 html {
   position: relative;
   height: 100%;
-  clear:both;
+  clear: both;
 }
 
 body {
-  height:100%;
-  overflow:hidden;
+  height: 100%;
+  overflow: hidden;
 }
 
 app-root {
@@ -29,11 +29,11 @@ app-root {
   background-color: #0d0d0d !important;
 }
 
-body>.container {
+body > .container {
   padding: 60px 15px 0;
 }
 
-.footer>.container {
+.footer > .container {
   padding-right: 15px;
   padding-left: 15px;
 }
@@ -78,3 +78,37 @@ img {
 .logo {
   max-width: 100%;
 }
+
+.breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  padding: .75rem .75rem;
+  margin-bottom: 0.5rem;
+  margin-top: 0.75rem;
+  list-style: none;
+  background-color: #e9ecef;
+  border-radius: .25rem;
+}
+
+/*scrollbar*/
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 10px;
+}
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }

@@ -221,6 +221,7 @@
     <Compile Include="Base\IWorkItemManagementService.cs" />
     <Compile Include="Base\ITeamServerManagementService.cs" />
     <Compile Include="Base\IUserManagementService.cs" />
+    <Compile Include="Dto\UserServerDto.cs" />
     <Compile Include="Dto\UserInfoDto.cs" />
     <Compile Include="Dto\UserRegistrationDto.cs" />
     <Compile Include="Dto\UserSessionDto.cs" />

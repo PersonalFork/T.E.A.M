@@ -1,0 +1,11 @@
+app-task-list {
+  height: 100%;
+  background: red;
+  display: block;
+  overflow: hidden;
+}
+
+.table-responsive {
+  height: calc(100% - 70px) !important;
+  overflow-y: scroll;
+}

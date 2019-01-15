@@ -19,11 +19,17 @@ namespace TEAM.Business
         private readonly ITeamServerManagementService _teamServerManagementService;
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
 
+        #region Constructor.
+
         public WorkItemManagementService()
         {
             _teamServerManagementService = new TeamServerManagementService();
         }
 
+        #endregion
+
+        #region IWorkItemManagementService Implementation.
+    
         public WorkItemDto GetWorkItemById(int taskId, int serverId, string userId)
         {
             TeamServer server = null;
@@ -189,5 +195,7 @@ namespace TEAM.Business
                 throw;
             }
         }
+
+        #endregion
     }
 }

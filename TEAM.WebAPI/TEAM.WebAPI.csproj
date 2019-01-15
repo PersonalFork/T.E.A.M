@@ -142,8 +142,14 @@
   <ItemGroup>
     <Compile Include="AppRegistration.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Common\Constants.cs" />
+    <Compile Include="Common\UserSessionManager.cs" />
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
+    <Compile Include="Controllers\UserManagementController.cs" />
+    <Compile Include="Filters\AddChallengeOnUnauthorizedResult.cs" />
+    <Compile Include="Filters\AuthenticationFailureResult.cs" />
+    <Compile Include="Filters\AuthenticationFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -165,6 +171,10 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TEAM.DataAccess\TEAM.DataAccess.csproj">
+      <Project>{2F602E5F-F2F7-4ADE-BFAE-F4FB140BBF98}</Project>
+      <Name>TEAM.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TEAM.Services\TEAM.Services.csproj">
       <Project>{123CC2F1-53B7-41FD-B6CB-34CF86623F4E}</Project>
       <Name>TEAM.Services</Name>

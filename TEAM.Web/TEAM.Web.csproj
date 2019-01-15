@@ -36,6 +36,7 @@
     <None Remove="README.md" />
     <None Remove="src\app\common\data.ts" />
     <None Remove="src\app\models\loginDto.ts" />
+    <None Remove="src\app\models\userServer.ts" />
     <None Remove="src\app\models\userSession.ts" />
   </ItemGroup>
 
@@ -52,6 +53,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="src\app\common\data.ts" />
     <TypeScriptCompile Include="src\app\models\loginDto.ts" />
+    <TypeScriptCompile Include="src\app\models\userServer.ts" />
     <TypeScriptCompile Include="src\app\models\userSession.ts" />
   </ItemGroup>
 

@@ -1,4 +1,5 @@
 ﻿using System.Web.Http;
+
 using TEAM.WebAPI;
 
 using Unity;
@@ -9,6 +10,10 @@ namespace TEAM.Web
     {
         public static void Register(HttpConfiguration config)
         {
+            // Disable host-level authentication.
+            // Source : https://docs.microsoft.com/en-us/aspnet/web-api/overview/security/authentication-filters#combining-authentication-filters-with-host-level-authentication
+            config.SuppressHostPrincipal();
+
             // Web API configuration and services
             UnityContainer container = new UnityContainer();
             RegisterTypes(container);

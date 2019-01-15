@@ -1,4 +1,5 @@
-﻿using TEAM.Business.Dto;
+﻿using System.Collections.Generic;
+using TEAM.Business.Dto;
 
 namespace TEAM.Business.Base
 {
@@ -6,5 +7,6 @@ namespace TEAM.Business.Base
     {
         int RegisterUser(UserRegistrationDto userRegistrationDto);
         int RegisterServer(int serverId, string userId, string serverUserId, string serverPassword, string serverDomain);
+        List<UserServerDto> GetUserServerList(string userId);
     }
 }

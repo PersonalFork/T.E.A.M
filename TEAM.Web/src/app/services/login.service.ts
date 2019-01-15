@@ -1,14 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
 import { LoginDto } from '../models/loginDto';
+import { Configuration } from '../common/data';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-
-  baseUri: string = "/api/";
 
   http: Http;
   constructor(http: Http) {
@@ -19,6 +18,6 @@ export class LoginService {
     let options = new Headers();
     options.set('Content-Type', 'application/json');
     let loginDto = new LoginDto(userId, password);
-    return this.http.post(this.baseUri + "login/Test", JSON.stringify(loginDto), { headers: options });
+    return this.http.post(Configuration.baseUri + "login/doLogin", JSON.stringify(loginDto), { headers: options });
   }
 }

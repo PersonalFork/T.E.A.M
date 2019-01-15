@@ -1,0 +1,7 @@
+app-server-list {
+  padding: 5px;
+}
+
+.server {
+  width: calc(50% - 8px);
+}
