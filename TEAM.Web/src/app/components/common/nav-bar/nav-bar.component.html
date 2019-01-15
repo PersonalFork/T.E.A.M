@@ -19,20 +19,23 @@
       </ul>
       <div class="mt-2 mt-md-0">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active" [hidden]="true">
-            <a class="nav-link" [routerLink]="['/register']" routerLinkActive="router-link-active">
-              New User?
-              <span class="sr-only">(current)</span>
-            </a>
-          </li>
+
+          <!--Profile Pic.-->
           <li class="nav-item active">
             <img src="../../../assets/profile/profile_temp.jpg" class="cursor-pointer img-thumbnail profile-pic-thumb img-sm-3 rounded-circle">
           </li>
-          <li class="nav-item active">
-            <a class="nav-link" [routerLink]="['/login']" routerLinkActive="router-link-active">
+
+          <li class="nav-item dropdown cur-ptr fade-in" appDropdown>
+            <a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink"
+               data-toggle="dropdown"
+               aria-haspopup="true" aria-expanded="false">
               {{navService.userName}}
-              <span class="sr-only">(current)</span>
             </a>
+            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
+              <a class="dropdown-item">Profile</a>
+              <a class="dropdown-item">Settings</a>
+              <a class="dropdown-item" (click)="logOut()">Log-Out</a>
+            </div>
           </li>
         </ul>
       </div>

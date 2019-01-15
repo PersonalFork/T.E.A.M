@@ -3,5 +3,5 @@ app-server-list {
 }
 
 .server {
-  width: calc(50% - 8px);
+  /*margin-bottom:20px;*/
 }

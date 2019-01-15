@@ -12,3 +12,13 @@ nav a div.logo {
   background-repeat: no-repeat;
   background-position: 5px 8px;
 }
+
+.server:hover {
+  cursor: pointer;
+  background-color: #f8f9fa !important;
+}
+
+.dropdown-item:hover {
+  background-color: #343a40 !important;
+  color: white !important;
+}

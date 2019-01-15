@@ -21,6 +21,7 @@ import { RegisterComponent } from './components/user/register/register.component
 import { TaskService } from './services/task.service';
 import { HttpModule } from '@angular/http';
 import { ServerListComponent } from './components/user/server-list/server-list.component';
+import { DropdownDirective } from './directives/dropdown.directive';
 
 
 @NgModule({
@@ -40,7 +41,8 @@ import { ServerListComponent } from './components/user/server-list/server-list.c
     NavBarComponent,
     FooterComponent,
     DashboardComponent,
-    ServerListComponent
+    ServerListComponent,
+    DropdownDirective
   ],
   imports: [
     BrowserModule,

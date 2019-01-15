@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef  } from '@angular/core';
 import { NavbarService } from './services/navbar.service';
 import { log } from 'util';
 

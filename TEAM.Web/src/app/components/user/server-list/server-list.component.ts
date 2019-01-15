@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserManagementService } from '../../../services/user-management.service';
 import { UserServerDto } from '../../../models/userServer';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-server-list',
@@ -12,7 +13,10 @@ export class ServerListComponent implements OnInit {
   isServerConfigured: boolean;
   configuredServers: Array<UserServerDto>;
 
-  constructor(private userManagementService: UserManagementService) { }
+  constructor(
+    private userManagementService: UserManagementService,
+    private router: Router) {
+  }
 
   ngOnInit() {
     this.isServerConfigured = true;
@@ -20,15 +24,15 @@ export class ServerListComponent implements OnInit {
   }
 
   getUserServers() {
-    debugger;
     this.userManagementService.getServersByUserId()
       .subscribe(
         response => {
-          debugger;
           this.configuredServers = response.json();
         },
         error => {
-
+          var errorMessage = error.statusText;
+          console.log(errorMessage);
+          this.router.navigate(['/login'], {});
         }
       )
   }

@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit {
     this.errorMessage = "";
     this.loginService.login(this.userId, this.password)
       .subscribe(
-        response => {
+      response => {
           this.nav.show();
           let userSessionResponse = response.json();
           let userSession = new UserSession(

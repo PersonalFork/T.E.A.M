@@ -45,8 +45,8 @@ namespace TEAM.WebAPI.Filters
 
         public Task ChallengeAsync(HttpAuthenticationChallengeContext context, CancellationToken cancellationToken)
         {
-            AuthenticationHeaderValue challenge = new AuthenticationHeaderValue("Basic");
-            context.Result = new AddChallengeOnUnauthorizedResult(challenge, context.Result);
+            //AuthenticationHeaderValue challenge = new AuthenticationHeaderValue("Basic");
+            //context.Result = new AddChallengeOnUnauthorizedResult(challenge, context.Result);
             return Task.FromResult(0);
         }
     }

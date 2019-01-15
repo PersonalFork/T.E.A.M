@@ -11,8 +11,26 @@
     <a href="#" class="btn btn-primary">Configure Server</a>
   </div>
 </div>
-<div *ngIf="isServerConfigured">
-  <div class="server float-left mx-2" *ngFor="let server of configuredServers">
+<div class="row" *ngIf="isServerConfigured">
+  <div class="server col-sm-6" *ngFor="let server of configuredServers">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Server : {{server.serverName}}</h5>
+        <p class="card-text"><b>URL : </b> {{server.serverUrl}}</p>
+        <a href="#" class="btn btn-primary">Browse Tasks</a>
+      </div>
+    </div>
+  </div>
+  <div class="server col-sm-6 mb-3" *ngFor="let server of configuredServers">
+    <div class="card bg-light ">
+      <div class="card-body">
+        <h5 class="card-title">Server : {{server.serverName}}</h5>
+        <p class="card-text"><b>URL : </b> {{server.serverUrl}}</p>
+        <a href="#" class="btn btn-primary">Browse Tasks</a>
+      </div>
+    </div>
+  </div>
+  <div class="server col-sm-6" *ngFor="let server of configuredServers">
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Server : {{server.serverName}}</h5>

@@ -65,5 +65,42 @@ namespace TEAM.WebAPI.Controllers
                 return Request.CreateErrorResponse(HttpStatusCode.InternalServerError, ex.Message);
             }
         }
+
+        [HttpPost]
+        [Route("doLogout")]
+        public HttpResponseMessage Logout()
+        {
+            UserSessionDto userSession = Request.GetUserSession();
+            if (userSession == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.Forbidden, "User Session not found.");
+            }
+            try
+            {
+                bool isLogoutSuccess = _loginService.Logout(userSession.SessionId);
+                if (isLogoutSuccess)
+                {
+                    HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, "User has logged off successfully.");
+                    CookieHeaderValue cookie = new CookieHeaderValue(Constants.SESSION_KEY, userSession.SessionId)
+                    {
+                        Expires = DateTimeOffset.Now.AddDays(-1),
+                        Domain = Request.RequestUri.Host,
+                        Path = "/"
+                    };
+                    response.Headers.AddCookies(new CookieHeaderValue[] { cookie });
+                    return response;
+                }
+                else
+                {
+                    HttpResponseMessage response = Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Could not logoff.");
+                    return response;
+                }
+            }
+            catch (Exception)
+            {
+                HttpResponseMessage response = Request.CreateErrorResponse(HttpStatusCode.InternalServerError, "Could not login.");
+                return response;
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using log4net;
+using System;
 
 using TEAM.Business.Base;
 using TEAM.Business.Dto;
@@ -10,6 +11,8 @@ namespace TEAM.Business
 {
     public class LoginService : ILoginService
     {
+        public static readonly ILog _loggger = LogManager.GetLogger(typeof(LoginService));
+
         public UserSessionDto GetUserSessionBySessionId(string sessionId)
         {
             if (string.IsNullOrEmpty(sessionId))
@@ -108,9 +111,23 @@ namespace TEAM.Business
             }
         }
 
-        public bool Logout()
+        public bool Logout(string sessionId)
         {
-            return true;
+            int rowsDeleted = 0;
+            using (UserSessionRepository userSessionRepository = new UserSessionRepository())
+            {
+                UserSession session = userSessionRepository.Find(x => x.SessionId == sessionId);
+                if (session != null)
+                {
+                    rowsDeleted = userSessionRepository.Delete(session);
+                }
+                else
+                {
+                    _loggger.Error(string.Format("Session with session id {0} not found", sessionId));
+                    throw new ApplicationException("Session not found.");
+                }
+            }
+            return rowsDeleted > 0;
         }
     }
 }

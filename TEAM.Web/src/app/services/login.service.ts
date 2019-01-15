@@ -20,4 +20,8 @@ export class LoginService {
     let loginDto = new LoginDto(userId, password);
     return this.http.post(Configuration.baseUri + "login/doLogin", JSON.stringify(loginDto), { headers: options });
   }
+
+  logOff() {
+    return this.http.post(Configuration.baseUri + "login/doLogout", {});
+  }
 }
