@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SessionData } from '../common/data';
 import { UserSession } from '../models/userSession';
+import { Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,9 +10,9 @@ export class NavbarService {
 
   visible: boolean;
   userName: string;
+  navbarVisibilityChanged: Subject<boolean> = new Subject<boolean>();
 
   constructor() {
-
     let userSessionInfo: UserSession = null;
     this.visible = true;
 
@@ -23,19 +24,23 @@ export class NavbarService {
     }
     if (userSessionInfo != null) {
       this.userName = userSessionInfo.firstName + " " + userSessionInfo.lastName;
+      this.navbarVisibilityChanged.next(true);
       this.visible = true;
     }
     else {
       this.userName = "";
+      this.navbarVisibilityChanged.next(false);
       this.visible = false;
     }
   }
 
   show() {
+    this.navbarVisibilityChanged.next(true);
     this.visible = true;
   }
 
   hide() {
+    this.navbarVisibilityChanged.next(false);
     this.visible = false;
   }
 }

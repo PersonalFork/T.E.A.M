@@ -1,4 +1,7 @@
-<app-nav-bar *ngIf="nav.visible"></app-nav-bar>
+<!--Modal Loader.-->
+<app-loader></app-loader>
+
+<app-nav-bar *ngIf="isToolbarVisible"></app-nav-bar>
 <!-- Begin page content -->
 <main role="main" class="main container-fluid">
   <router-outlet></router-outlet>

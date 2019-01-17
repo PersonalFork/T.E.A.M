@@ -1,0 +1,40 @@
+#modalLoader .modal-backdrop {
+  opacity: 0.9;
+  background-color: #03072b;
+}
+
+#modalLoader .modal-content {
+  margin-top: 50%;
+}
+
+#modalLoader .progress.active .progress-bar,
+.progress-bar.active {
+  background-color: #05082c;
+}
+
+/* MODAL */
+.modal-content {
+  background-clip: padding-box;
+  background-color: #FFFFFF;
+  border: 1px solid rgba(0, 0, 0, 0);
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  outline: 0 none;
+  position: relative;
+}
+
+.modal-dialog {
+  z-index: 1200;
+}
+
+.modal-body {
+  padding: 10px !important;
+}
+
+.modal-body-1 {
+  padding: 20px 30px 20px 30px;
+}
+
+.fade.in {
+  background: #000;
+}

@@ -4,6 +4,7 @@ import { UserSession } from '../../../models/userSession';
 import { LoginService } from '../../../services/login.service';
 import { NavbarService } from '../../../services/navbar.service';
 import { SessionData } from '../../../common/data';
+import { LoaderService } from '../../../services/loader.service';
 
 @Component({
   selector: 'app-login',
@@ -14,6 +15,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private nav: NavbarService,
+    private loader: LoaderService,
     private loginService: LoginService) {
     nav.hide();
   }
@@ -23,15 +25,16 @@ export class LoginComponent implements OnInit {
   errorMessage: string = "";
 
   ngOnInit() {
+    this.nav.hide();
     this.validateLogin();
   }
 
   doLogin() {
+    this.loader.showLoader("Please wait while we log you in..");
     this.errorMessage = "";
     this.loginService.login(this.userId, this.password)
       .subscribe(
-      response => {
-          this.nav.show();
+        response => {
           let userSessionResponse = response.json();
           let userSession = new UserSession(
             userSessionResponse.sessionId,
@@ -42,18 +45,19 @@ export class LoginComponent implements OnInit {
           SessionData.userSession = userSession;
           localStorage.setItem("userSessionInfo", JSON.stringify(userSession));
           this.nav.userName = userSession.firstName + " " + userSession.lastName;
+          this.loader.hideLoader();
           this.router.navigate(['/server-list'], {});
         },
         error => {
           console.log(error);
-          this.errorMessage = error.json().Message;
+          this.loader.hideLoader();
+          this.errorMessage = error.statusText;
         }
       );
   }
 
   validateLogin() {
     if (SessionData.getUserSession() != null) {
-      this.nav.show();
       this.router.navigate(['/server-list'], {});
     };
   }

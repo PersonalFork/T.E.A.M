@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { UserManagementService } from '../../../services/user-management.service';
 import { UserServerDto } from '../../../models/userServer';
 import { Router } from '@angular/router';
+import { Response } from 'selenium-webdriver/http';
+import { NavbarService } from '../../../services/navbar.service';
+import { LoaderService } from '../../../services/loader.service';
 
 @Component({
   selector: 'app-server-list',
@@ -14,25 +17,44 @@ export class ServerListComponent implements OnInit {
   configuredServers: Array<UserServerDto>;
 
   constructor(
+    private navService: NavbarService,
+    private loaderService: LoaderService,
     private userManagementService: UserManagementService,
     private router: Router) {
   }
 
   ngOnInit() {
+    this.loaderService.showLoader("Loading Server List..");
+    this.navService.show();
     this.isServerConfigured = true;
     this.getUserServers();
+    //this.loaderService.hideLoader();
+  }
+
+  showLoader() {
+    debugger
+    this.loaderService.showLoader("Hello World..");
   }
 
   getUserServers() {
+    this.loaderService.showLoader("Loading Server List..");
     this.userManagementService.getServersByUserId()
       .subscribe(
         response => {
           this.configuredServers = response.json();
+          this.loaderService.hideLoader();
         },
         error => {
+          // unauthorized.
+          if (error.status == 401) {
+            this.loaderService.hideLoader();
+            this.router.navigate(['/login'], {});
+          }
+          else {
+            this.loaderService.hideLoader();
+          }
           var errorMessage = error.statusText;
-          console.log(errorMessage);
-          this.router.navigate(['/login'], {});
+          console.log(error);
         }
       )
   }

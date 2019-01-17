@@ -29,7 +29,7 @@ namespace TEAM.Business
         #endregion
 
         #region IWorkItemManagementService Implementation.
-    
+
         public WorkItemDto GetWorkItemById(int taskId, int serverId, string userId)
         {
             TeamServer server = null;
@@ -108,7 +108,7 @@ namespace TEAM.Business
                 using (UserServerInfoRepository userServerInfoRepository = new UserServerInfoRepository())
                 {
                     userServerInfo = userServerInfoRepository.FindLocal(
-                        x => string.Equals(x.UserId, userId, StringComparison.OrdinalIgnoreCase)
+                        x => x.UserId == userId
                         && x.TfsId == serverId
                     );
                     if (userServerInfo == null)

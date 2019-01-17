@@ -23,12 +23,7 @@ namespace TEAM.Test
         public void GetUserIncompleteItems()
         {
             WorkItemManagementService service = new WorkItemManagementService();
-            List<int> workItemIdList = new List<int>()
-            {
-                193846,
-                196787
-            };
-            List<Business.Dto.WorkItemDto> obj = service.GetCurrentUserIncompleteItems(5, "1111111");
+            List<Business.Dto.WorkItemDto> obj = service.GetCurrentUserIncompleteItems(1, "1111111");
             Assert.IsTrue(obj.Count > 0);
         }
 

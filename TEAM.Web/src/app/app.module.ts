@@ -22,7 +22,8 @@ import { TaskService } from './services/task.service';
 import { HttpModule } from '@angular/http';
 import { ServerListComponent } from './components/user/server-list/server-list.component';
 import { DropdownDirective } from './directives/dropdown.directive';
-
+import { LoaderComponent } from './components/common/loader/loader.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -42,12 +43,14 @@ import { DropdownDirective } from './directives/dropdown.directive';
     FooterComponent,
     DashboardComponent,
     ServerListComponent,
-    DropdownDirective
+    DropdownDirective,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
+    NgbModule.forRoot(),
     RouterModule.forRoot([
       {
         path: '',

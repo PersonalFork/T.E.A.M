@@ -2,6 +2,6 @@
 {
     public class Constants
     {
-        public const string SESSION_KEY = "session-id";
+        public const string SESSION_KEY = "JSESSIONID";
     }
 }
