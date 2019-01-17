@@ -24,16 +24,9 @@ export class ServerListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loaderService.showLoader("Loading Server List..");
     this.navService.show();
     this.isServerConfigured = true;
     this.getUserServers();
-    //this.loaderService.hideLoader();
-  }
-
-  showLoader() {
-    debugger
-    this.loaderService.showLoader("Hello World..");
   }
 
   getUserServers() {
@@ -53,8 +46,6 @@ export class ServerListComponent implements OnInit {
           else {
             this.loaderService.hideLoader();
           }
-          var errorMessage = error.statusText;
-          console.log(error);
         }
       )
   }

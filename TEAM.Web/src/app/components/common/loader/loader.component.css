@@ -1,6 +1,16 @@
+.loader-modal {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  background-color: #000000f2;
+  z-index: 2000;
+}
+
 #modalLoader .modal-backdrop {
   opacity: 0.9;
-  background-color: #03072b;
+  background-color: #000000f2;
 }
 
 #modalLoader .modal-content {
@@ -9,7 +19,7 @@
 
 #modalLoader .progress.active .progress-bar,
 .progress-bar.active {
-  background-color: #05082c;
+  background-color: #007bff;
 }
 
 /* MODAL */
