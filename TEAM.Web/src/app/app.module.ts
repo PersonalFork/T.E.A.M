@@ -24,6 +24,7 @@ import { ServerListComponent } from './components/user/server-list/server-list.c
 import { DropdownDirective } from './directives/dropdown.directive';
 import { LoaderComponent } from './components/common/loader/loader.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NotificationComponent } from './components/common/notification/notification.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +45,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     DashboardComponent,
     ServerListComponent,
     DropdownDirective,
-    LoaderComponent
+    LoaderComponent,
+    NotificationComponent
   ],
   imports: [
     BrowserModule,

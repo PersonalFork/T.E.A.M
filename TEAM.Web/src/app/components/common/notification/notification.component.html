@@ -1,0 +1,18 @@
+<div class="app-notification">
+
+  <div *ngFor="let notification of notifications">
+    <div class="alert alert-info fadeOut" role="alert"
+         [ngClass]="{
+         'alert-info': notification.type==0,
+         'alert-warning': notification.type==1,
+         'alert-danger': notification.type==2,
+         'alert-success': notification.type==3}">
+      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 class="alert-heading">{{notification.getTypeString()}}</h4>
+      <p class="mb-0">{{notification.message}}</p>
+      <p class="mb-0">{{notification.details}}</p>
+    </div>
+  </div>
+</div>

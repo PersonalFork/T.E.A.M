@@ -13,7 +13,7 @@ using TEAM.WebAPI.Common;
 
 namespace TEAM.Web.Controllers
 {
-    [RoutePrefix("api/Tasks")]
+    [RoutePrefix("api/tasks")]
     public class TaskController : ApiController
     {
         public static readonly ILog _loggger = LogManager.GetLogger(typeof(TaskController));
@@ -23,7 +23,7 @@ namespace TEAM.Web.Controllers
             _workItemManagementService = new WorkItemManagementService();
         }
 
-        [Route("GetIncompleteTasks")]
+        [Route("getIncompleteTasks")]
         [HttpGet]
         public HttpResponseMessage GetIncompleteTasks(int serverId)
         {

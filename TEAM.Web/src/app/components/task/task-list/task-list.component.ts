@@ -8,14 +8,24 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TaskListComponent implements OnInit {
 
-  tasks;
-  title = 'List of Tasks';
+  tasks: Array<any>;
 
-  constructor(service: TaskService) {
-    this.tasks = service.getTasks();
+  constructor(private taskService: TaskService) {
   }
 
   ngOnInit() {
+    this.getMyIncompleteTasks();
   }
 
+  // loads the list of incomplete items.
+  getMyIncompleteTasks() {
+    this.taskService.getMyIncompleteTasks()
+      .subscribe(
+        result => {
+          this.tasks = result.json();
+        },
+        error => {
+        }
+      );
+  }
 }

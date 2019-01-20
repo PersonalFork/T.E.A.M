@@ -1,9 +1,23 @@
 ﻿using Newtonsoft.Json;
 using DTO = TEAM.Business.Dto.Base.Dto;
+
 namespace TEAM.Business.Dto
 {
     public class WorkItemDto : DTO
     {
+        #region Public Properties.
+
+        private int _id;
+        public int Id
+        {
+            get => _id;
+            set
+            {
+                _id = value;
+                RaisePropertyChanged(nameof(Id));
+            }
+        }
+
         private int _taskId;
         [JsonProperty("taskId")]
         public int TaskId
@@ -16,15 +30,27 @@ namespace TEAM.Business.Dto
             }
         }
 
-        private string _assignedTo;
-        [JsonProperty("assignedTo")]
-        public string AssignedTo
+        private int _serverId;
+        [JsonProperty("serverId")]
+        public int ServerId
         {
-            get => _assignedTo;
+            get => _serverId;
             set
             {
-                _assignedTo = value;
-                RaisePropertyChanged(nameof(AssignedTo));
+                _serverId = value;
+                RaisePropertyChanged(nameof(ServerId));
+            }
+        }
+
+        private int _weekId;
+        [JsonProperty("weekId")]
+        public int WeekId
+        {
+            get => _weekId;
+            set
+            {
+                _weekId = value;
+                RaisePropertyChanged(nameof(WeekId));
             }
         }
 
@@ -51,30 +77,6 @@ namespace TEAM.Business.Dto
             }
         }
 
-        private string _path;
-        [JsonProperty("path")]
-        public string Path
-        {
-            get => _path;
-            set
-            {
-                _path = value;
-                RaisePropertyChanged(nameof(Path));
-            }
-        }
-
-        private string _iteration;
-        [JsonProperty("sprint")]
-        public string Iteration
-        {
-            get => _iteration;
-            set
-            {
-                _iteration = value;
-                RaisePropertyChanged(nameof(Iteration));
-            }
-        }
-
         private string _status;
         [JsonProperty("status")]
         public string Status
@@ -84,6 +86,78 @@ namespace TEAM.Business.Dto
             {
                 _status = value;
                 RaisePropertyChanged(nameof(Status));
+            }
+        }
+
+        private string _assignedTo;
+        [JsonProperty("assignedTo")]
+        public string AssignedTo
+        {
+            get => _assignedTo;
+            set
+            {
+                _assignedTo = value;
+                RaisePropertyChanged(nameof(AssignedTo));
+            }
+        }
+
+        private string _sprint;
+        [JsonProperty("sprint")]
+        public string Sprint
+        {
+            get => _sprint;
+            set
+            {
+                _sprint = value;
+                RaisePropertyChanged(nameof(Sprint));
+            }
+        }
+
+        private string _project;
+        [JsonProperty("project")]
+        public string Project
+        {
+            get => _project;
+            set
+            {
+                _project = value;
+                RaisePropertyChanged(nameof(Project));
+            }
+        }
+
+        private string _startDate;
+        [JsonProperty("startDate")]
+        public string StartDate
+        {
+            get => _startDate;
+            set
+            {
+                _startDate = value;
+                RaisePropertyChanged(nameof(StartDate));
+            }
+        }
+
+        private string _endDate;
+        [JsonProperty("endDate")]
+        public string EndDate
+        {
+            get => _endDate;
+            set
+            {
+                _endDate = value;
+                RaisePropertyChanged(nameof(EndDate));
+            }
+        }
+
+        private string _eta;
+        [JsonProperty("eta")]
+        public string ETA
+        {
+            get => _eta;
+            set
+            {
+                _eta = value;
+                RaisePropertyChanged(nameof(ETA));
             }
         }
 
@@ -99,64 +173,84 @@ namespace TEAM.Business.Dto
             }
         }
 
-        private double _completedHours;
-        [JsonProperty("completedHours")]
-        public double CompletedHours
+        private double _weekHours;
+        [JsonProperty("weekHours")]
+        public double WeekHours
         {
-            get => _completedHours;
+            get => _weekHours;
             set
             {
-                _completedHours = value;
-                RaisePropertyChanged(nameof(CompletedHours));
+                _weekHours = value;
+                RaisePropertyChanged(nameof(WeekHours));
             }
         }
 
-        private double _remainingHours;
-        [JsonProperty("remainingHours")]
-        public double RemainingHours
+        private int _totalHours;
+        [JsonProperty("totalHours")]
+        public int TotalHours
         {
-            get => _remainingHours;
+            get => _totalHours;
             set
             {
-                _remainingHours = value;
-                RaisePropertyChanged(nameof(RemainingHours));
+                _totalHours = value;
+                RaisePropertyChanged(nameof(TotalHours));
             }
         }
 
-        private string _year;
-        [JsonProperty("year")]
-        public string Year
+        private string _comments;
+        public string Comments
         {
-            get => _year;
+            get => _comments;
             set
             {
-                _year = value;
-                RaisePropertyChanged(nameof(Year));
+                _comments = value;
+                RaisePropertyChanged(nameof(Comments));
             }
         }
 
-        private string _month;
-        [JsonProperty("month")]
-        public string Month
+        #endregion
+
+        #region Public Method Declarations.
+
+        public bool Equals(WorkItemDto dto, out bool isUpdated)
         {
-            get => _month;
-            set
+            isUpdated = false;
+            if (dto == null)
             {
-                _month = value;
-                RaisePropertyChanged(nameof(Month));
+                return false;
             }
+
+            if (dto.TaskId != TaskId)
+            {
+                return false;
+            }
+
+            if (dto.Title != Title)
+            {
+                isUpdated = true;
+                return false;
+            }
+
+            if (dto.Sprint != Sprint)
+            {
+                isUpdated = true;
+                return false;
+            }
+
+            if (dto.Description != Description)
+            {
+                isUpdated = true;
+                return false;
+            }
+
+            if (dto.Project != Project)
+            {
+                isUpdated = true;
+                return false;
+            }
+            return false;
         }
 
-        private int _weekNumber;
-        [JsonProperty("week")]
-        public int WeekNumber
-        {
-            get => _weekNumber;
-            set
-            {
-                _weekNumber = value;
-                RaisePropertyChanged(nameof(WeekNumber));
-            }
-        }
+        #endregion
     }
 }

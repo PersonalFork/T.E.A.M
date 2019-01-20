@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { SessionManager } from '../../../common/SessionManager';
 import { UserSession } from '../../../models/userSession';
+import { LoaderService } from '../../../services/loader.service';
 import { LoginService } from '../../../services/login.service';
 import { NavbarService } from '../../../services/navbar.service';
-import { SessionData } from '../../../common/data';
-import { LoaderService } from '../../../services/loader.service';
+import { NotificationService } from '../../../services/notification.service';
+import { ErrorResponseManager } from '../../../common/ErrorResponseManager';
 
 @Component({
   selector: 'app-login',
@@ -16,6 +18,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private nav: NavbarService,
     private loader: LoaderService,
+    private notificationService: NotificationService,
     private loginService: LoginService) {
     nav.hide();
   }
@@ -42,8 +45,8 @@ export class LoginComponent implements OnInit {
             userSessionResponse.user.firstName,
             userSessionResponse.user.lastName
           );
-          SessionData.userSession = userSession;
-          localStorage.setItem("userSessionInfo", JSON.stringify(userSession));
+          SessionManager.createLocalSession(userSession);
+
           this.nav.userName = userSession.firstName + " " + userSession.lastName;
           this.loader.hideLoader();
           this.router.navigate(['/server-list'], {});
@@ -51,13 +54,14 @@ export class LoginComponent implements OnInit {
         error => {
           console.log(error);
           this.loader.hideLoader();
+          this.notificationService.showError("An error occurred while login.", ErrorResponseManager.GetErrorMessageString(error));
           this.errorMessage = error.statusText;
         }
       );
   }
 
   validateLogin() {
-    if (SessionData.getUserSession() != null) {
+    if (SessionManager.getUserSession() != null) {
       this.router.navigate(['/server-list'], {});
     };
   }

@@ -15,7 +15,7 @@
            [(ngModel)]="password"
            placeholder="Password" required="">
 
-    <div class="error" *ngIf="errorMessage !=''">
+    <div class="error" *ngIf="errorMessage !=''" hidden>
       <span>{{errorMessage}}</span>
     </div>
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http } from '@angular/http';
+import { AppConfiguration } from '../common/AppConfiguration';
 import { LoginDto } from '../models/loginDto';
-import { Configuration } from '../common/data';
 
 
 @Injectable({
@@ -18,10 +18,10 @@ export class LoginService {
     let options = new Headers();
     options.set('Content-Type', 'application/json');
     let loginDto = new LoginDto(userId, password);
-    return this.http.post(Configuration.baseUri + "login/doLogin", JSON.stringify(loginDto), { headers: options });
+    return this.http.post(AppConfiguration.baseUri + "login/doLogin", JSON.stringify(loginDto), { headers: options });
   }
 
   logOff() {
-    return this.http.post(Configuration.baseUri + "login/doLogout", {});
+    return this.http.post(AppConfiguration.baseUri + "login/doLogout", {});
   }
 }

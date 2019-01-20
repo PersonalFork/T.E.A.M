@@ -9,5 +9,7 @@ namespace TEAM.Business.Base
         WorkItemDto GetWorkItemById(int taskId, int serverId, string userId);
 
         List<WorkItemDto> GetCurrentUserIncompleteItems(int serverId, string userId);
+
+        List<WorkItemDto> Sync(int weekId, List<WorkItemDto> workItems, string userId);
     }
 }
