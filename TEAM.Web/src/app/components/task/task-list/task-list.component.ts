@@ -1,5 +1,10 @@
-import { TaskService } from './../../../services/task.service';
 import { Component, OnInit } from '@angular/core';
+import { ErrorResponseManager } from '../../../common/ErrorResponseManager';
+import { LoaderService } from '../../../services/loader.service';
+import { NotificationService } from '../../../services/notification.service';
+import { TaskService } from './../../../services/task.service';
+import { NavbarService } from '../../../services/navbar.service';
+import { debug } from 'util';
 
 @Component({
   selector: 'app-task-list',
@@ -9,12 +14,40 @@ import { Component, OnInit } from '@angular/core';
 export class TaskListComponent implements OnInit {
 
   tasks: Array<any>;
+  selectedTask: any;
 
-  constructor(private taskService: TaskService) {
+  constructor(
+    private navbarService: NavbarService,
+    private taskService: TaskService,
+    private loaderService: LoaderService,
+    private notificationService: NotificationService) {
   }
 
   ngOnInit() {
-    this.getMyIncompleteTasks();
+    this.navbarService.show();
+    //this.loaderService.hideAll();
+    this.getCurrentWeekTasks();
+  }
+
+  selectTask(task) {
+    debugger
+    this.selectedTask = task;
+  }
+
+  // gets the current week tasks.
+  getCurrentWeekTasks() {
+    this.loaderService.showLoader("Loading Tasks from Server... This will take some time.");
+    this.taskService.getCurrentWeekTasks()
+      .subscribe(
+        result => {
+          this.tasks = result.json();
+          this.loaderService.hideLoader();
+        },
+        error => {
+          this.loaderService.hideLoader();
+          this.notificationService.showError("Failed to get tasks.", ErrorResponseManager.GetErrorMessageString(error));
+        }
+      );
   }
 
   // loads the list of incomplete items.

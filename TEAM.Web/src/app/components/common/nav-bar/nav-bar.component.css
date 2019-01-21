@@ -13,12 +13,20 @@ nav a div.logo {
   background-position: 5px 8px;
 }
 
+.menu-dark {
+  /*background-color: #343a40;*/
+  color: white;
+  border-top: 0px;
+  top: 50px;
+  border-radius: 0px 0px 5px 5px;
+}
+
 .server:hover {
   cursor: pointer;
   background-color: #f8f9fa !important;
 }
 
 .dropdown-item:hover {
-  background-color: #343a40 !important;
+  background-color: #007bff !important;
   color: white !important;
 }

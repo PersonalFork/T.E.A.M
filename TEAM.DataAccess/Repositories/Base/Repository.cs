@@ -176,10 +176,11 @@ namespace TEAM.DAL.Repositories.Base
             if (entity != null)
             {
                 entitySet.AddOrUpdate(entity);
-                return DataContext.SaveChanges();
+                DataContext.SaveChanges();
+                return entity.Id;
             }
 
-            return 0;
+            return -1;
         }
         #endregion
 

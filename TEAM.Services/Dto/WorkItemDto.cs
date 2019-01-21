@@ -8,6 +8,7 @@ namespace TEAM.Business.Dto
         #region Public Properties.
 
         private int _id;
+        [JsonProperty("id")]
         public int Id
         {
             get => _id;
@@ -17,6 +18,19 @@ namespace TEAM.Business.Dto
                 RaisePropertyChanged(nameof(Id));
             }
         }
+
+        private string _userId;
+        [JsonProperty("userId")]
+        public string UserId
+        {
+            get => _userId;
+            set
+            {
+                _userId = value;
+                RaisePropertyChanged(nameof(UserId));
+            }
+        }
+
 
         private int _taskId;
         [JsonProperty("taskId")]

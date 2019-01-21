@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { Http, Headers } from '@angular/http';
 import { AppConfiguration } from '../common/AppConfiguration';
 
 @Injectable({
@@ -7,11 +7,18 @@ import { AppConfiguration } from '../common/AppConfiguration';
 })
 export class TaskService {
 
-  constructor(private http: Http) { }
+  private options = new Headers();
+  constructor(private http: Http) {
+    this.options.set("Content-Type", 'application/json');
+  }
 
   getMyIncompleteTasks() {
+    return this.http.get(AppConfiguration.baseUri + "tasks/getIncompleteTasks", { headers: this.options });
+  }
+
+  getCurrentWeekTasks() {
     let options = new Headers();
     options.set('Content-Type', 'application/json');
-    return this.http.get(AppConfiguration.baseUri + "tasks/getIncompleteTasks");
+    return this.http.get(AppConfiguration.baseUri + "tasks/getCurrentWeekTasks", { headers: options });
   }
 }

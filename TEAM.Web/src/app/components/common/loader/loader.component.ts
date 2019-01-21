@@ -19,6 +19,14 @@ export class LoaderComponent implements OnInit {
 
   ngOnInit() {
     this.loaderService.loaderVisibilityChanged.subscribe((payload) => {
+      if (payload == null) {
+        setTimeout(() => {
+          this.message = "";
+          this.loaderCount = 0;
+        }, 0);
+        return;
+      }
+
       this.message = payload.message;
       if (payload.isLoaderVisible) {
         setTimeout(() => {

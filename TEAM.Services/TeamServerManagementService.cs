@@ -25,7 +25,7 @@ namespace TEAM.Business
 {
     public class TeamServerManagementService : ITeamServerManagementService
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         #region ITeamServerManagementService Implementation.
 
@@ -73,7 +73,7 @@ namespace TEAM.Business
             }
             catch (Exception ex)
             {
-                logger.Error(ex);
+                _logger.Error(ex);
                 throw;
             }
         }
@@ -111,17 +111,17 @@ namespace TEAM.Business
             }
             catch (TeamFoundationServiceUnavailableException ex)
             {
-                logger.Error(ex, "Service not available");
+                _logger.Error(ex, "Service not available");
                 throw new ServiceUnavailableException(url, "Service not Available", ex);
             }
             catch (TeamFoundationServerUnauthorizedException ex)
             {
-                logger.Error(ex, "Authentication Failure.");
+                _logger.Error(ex, "Authentication Failure.");
                 throw new TFSAuthenticationException("Authentication Failure.", ex);
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Authentication Failure.");
+                _logger.Error(ex, "Authentication Failure.");
                 throw;
             }
         }
@@ -146,17 +146,17 @@ namespace TEAM.Business
             }
             catch (TeamFoundationServiceUnavailableException ex)
             {
-                logger.Error(ex, "Service not available");
+                _logger.Error(ex, "Service not available");
                 throw new ServiceUnavailableException(url, "Service not Available", ex);
             }
             catch (TeamFoundationServerUnauthorizedException ex)
             {
-                logger.Error(ex, "Authentication Failure.");
+                _logger.Error(ex, "Authentication Failure.");
                 throw new TFSAuthenticationException("Authentication Failure.", ex);
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Authentication Failure.");
+                _logger.Error(ex, "Authentication Failure.");
                 throw;
             }
         }
@@ -165,13 +165,15 @@ namespace TEAM.Business
 
         #region Task Management.
 
-        /// <summary>
-        /// Retrieves a Work Item by ID from the configured server.
-        /// </summary>
-        /// <param name="taskId">Task Id.</param>
-        /// <param name="serverUrl">Server URL.</param>
-        /// <param name="credentialHash">The hash for authentication.</param>
-        /// <returns></returns>
+        public List<WorkItem> GetUserIncompleteItems(string serverUrl, string credentialHash)
+        {
+            string query = "Select * From WorkItems " +
+                    "Where [System.AssignedTo] = @me " +
+                    "AND ([System.State] = 'To Do' OR [System.State] = 'In Progress')"
+                    + "Order By [State] Asc, [Changed Date] Desc";
+            return GetWorkItemByQuery(query, serverUrl, credentialHash);
+        }
+
         public WorkItem GetWorkItemById(int taskId, string serverUrl, string credentialHash)
         {
             WorkItemCollection col = null;
@@ -196,22 +198,107 @@ namespace TEAM.Business
             }
             catch (TeamFoundationServiceUnavailableException ex)
             {
-                logger.Error(ex, "Service not available");
+                _logger.Error(ex, "Service not available");
                 throw new ServiceUnavailableException(serverUrl, "Service not Available", ex);
             }
             catch (TeamFoundationServerUnauthorizedException ex)
             {
-                logger.Error(ex, "Authentication Failure.");
+                _logger.Error(ex, "Authentication Failure.");
                 throw new TFSAuthenticationException("Authentication Failure.", ex);
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Authentication Failure.");
+                _logger.Error(ex, "Authentication Failure.");
                 throw;
             }
         }
 
-        public List<WorkItem> GetWorkItemByQuery(string query, string serverUrl, string credentialHash)
+        public List<WorkItem> GetWorkItemByIds(List<int> taskIdList, string serverUrl, string credentialHash)
+        {
+            WorkItemCollection col = null;
+            try
+            {
+                NetworkCredential credential = JsonConvert.DeserializeObject<NetworkCredential>(credentialHash.Decrypt());
+                WindowsCredential winCred = new WindowsCredential(credential);
+                VssCredentials vssCred = new VssClientCredentials(winCred);
+                TfsTeamProjectCollection tpc = new TfsTeamProjectCollection(new Uri(serverUrl), vssCred);
+
+                if (taskIdList == null || taskIdList.Count == 0)
+                {
+                    throw new Exception("Task List cannot be empty");
+                }
+
+                string iterationQuery = "'" + taskIdList[0].ToString() + "' ";
+                foreach (int taskId in taskIdList)
+                {
+                    iterationQuery = "OR [Id]'" + taskId + "' ";
+                }
+
+                string query = "Select * From WorkItems Where [Id] = "
+                    + iterationQuery
+                    + "Order By [State] Asc, [Changed Date] Desc";
+
+                WorkItemStore wis = new WorkItemStore(tpc);
+                col = wis.Query(query);
+                List<WorkItem> wil = new List<WorkItem>();
+                for (int i = 0; i < col.Count; i++)
+                {
+                    wil.Add(wil[i]);
+                }
+                return wil;
+            }
+            catch (TeamFoundationServiceUnavailableException ex)
+            {
+                _logger.Error(ex, "Service not available");
+                throw new ServiceUnavailableException(serverUrl, "Service not Available", ex);
+            }
+            catch (TeamFoundationServerUnauthorizedException ex)
+            {
+                _logger.Error(ex, "Authentication Failure.");
+                throw new TFSAuthenticationException("Authentication Failure.", ex);
+            }
+            catch (Exception ex)
+            {
+                _logger.Error(ex, "Authentication Failure.");
+                throw;
+            }
+        }
+
+        public List<WorkItem> GetWorkItemsByIds(IList<int> workItemIdList, string serverUrl, string credentialHash, bool includeIncompleteItems)
+        {
+            string pendingQuery = string.Empty;
+            string joinCondition = "AND";
+            if (includeIncompleteItems)
+            {
+                joinCondition = " OR";
+                pendingQuery = "AND ([System.State] = 'To Do' OR [System.State] = 'In Progress')";
+            }
+            string joinedIdQuery = string.Empty;
+            if (workItemIdList.Count > 0)
+            {
+                joinedIdQuery = "[Id] =" + string.Join(" OR [Id] =", workItemIdList);
+            }
+            if (!string.IsNullOrEmpty(joinedIdQuery))
+            {
+                joinedIdQuery = joinCondition + " (" + joinedIdQuery + ")";
+            }
+            else
+            {
+                if (!includeIncompleteItems)
+                {
+                    return new List<WorkItem>();
+                }
+            }
+
+            string query = "Select * From WorkItems " +
+                    "Where [System.AssignedTo] = @me " +
+                    pendingQuery +
+                    joinedIdQuery +
+                    " Order By [State] Asc, [Changed Date] Desc";
+            return GetWorkItemByQuery(query, serverUrl, credentialHash);
+        }
+
+        private List<WorkItem> GetWorkItemByQuery(string query, string serverUrl, string credentialHash)
         {
             WorkItemCollection col = null;
             try
@@ -237,72 +324,28 @@ namespace TEAM.Business
             }
             catch (TeamFoundationServiceUnavailableException ex)
             {
-                logger.Error(ex, "Service not available");
+                _logger.Error(ex, "Service not available");
                 throw new ServiceUnavailableException(serverUrl, "Service not Available", ex);
             }
             catch (TeamFoundationServerUnauthorizedException ex)
             {
-                logger.Error(ex, "Authentication Failure.");
+                _logger.Error(ex, "Authentication Failure.");
                 throw new TFSAuthenticationException("Authentication Failure.", ex);
             }
             catch (Exception ex)
             {
-                logger.Error(ex, "Authentication Failure.");
+                _logger.Error(ex, "Authentication Failure.");
                 throw;
             }
         }
 
-        public List<WorkItem> GetWorkItemByIds(List<int> taskIdList, string serverUrl, string credentialHash)
+
+        public List<WorkItem> GetWorkItemsByIds(IList<int> workItemId, IList<int> excludeIds, string serverUrl, string credentialHash, bool includeIncompleteItems)
         {
-            WorkItemCollection col = null;
-            try
-            {
-                NetworkCredential credential = JsonConvert.DeserializeObject<NetworkCredential>(credentialHash.Decrypt());
-                WindowsCredential winCred = new WindowsCredential(credential);
-                VssCredentials vssCred = new VssClientCredentials(winCred);
-                TfsTeamProjectCollection tpc = new TfsTeamProjectCollection(new Uri(serverUrl), vssCred);
-
-                if (taskIdList == null || taskIdList.Count == 0)
-                {
-                    throw new Exception("Task List cannot be empty");
-                }
-
-                string iterationQuery = "'" + taskIdList[0].ToString() + "' ";
-                foreach (int taskId in taskIdList)
-                {
-                    iterationQuery = "OR '" + taskId + "' ";
-                }
-
-                string query = "Select * From WorkItems Where [Id] = "
-                    + iterationQuery
-                    + "Order By [State] Asc, [Changed Date] Desc";
-
-                WorkItemStore wis = new WorkItemStore(tpc);
-                col = wis.Query(query);
-                List<WorkItem> wil = new List<WorkItem>();
-                for (int i = 0; i < col.Count; i++)
-                {
-                    wil.Add(wil[i]);
-                }
-                return wil;
-            }
-            catch (TeamFoundationServiceUnavailableException ex)
-            {
-                logger.Error(ex, "Service not available");
-                throw new ServiceUnavailableException(serverUrl, "Service not Available", ex);
-            }
-            catch (TeamFoundationServerUnauthorizedException ex)
-            {
-                logger.Error(ex, "Authentication Failure.");
-                throw new TFSAuthenticationException("Authentication Failure.", ex);
-            }
-            catch (Exception ex)
-            {
-                logger.Error(ex, "Authentication Failure.");
-                throw;
-            }
+            throw new NotImplementedException();
         }
-        #endregion 
+
+        #endregion
 
         #endregion
     }

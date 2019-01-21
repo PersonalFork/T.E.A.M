@@ -14,7 +14,7 @@ export class LoaderPayload {
   providedIn: 'root'
 })
 export class LoaderService {
-  loader: LoaderPayload;
+  private loader: LoaderPayload;
   loaderVisibilityChanged: Subject<LoaderPayload> = new Subject<LoaderPayload>();
 
   constructor() { }
@@ -27,5 +27,9 @@ export class LoaderService {
   hideLoader() {
     this.loader = new LoaderPayload("", false);
     this.loaderVisibilityChanged.next(this.loader);
+  }
+
+  hideAll() {
+    this.loaderVisibilityChanged.next(null);
   }
 }

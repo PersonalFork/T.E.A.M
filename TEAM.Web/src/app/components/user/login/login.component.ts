@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
   errorMessage: string = "";
 
   ngOnInit() {
+    this.loader.showLoader("Loading...");
     this.nav.hide();
     this.validateLogin();
   }
@@ -52,7 +53,6 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/server-list'], {});
         },
         error => {
-          console.log(error);
           this.loader.hideLoader();
           this.notificationService.showError("An error occurred while login.", ErrorResponseManager.GetErrorMessageString(error));
           this.errorMessage = error.statusText;
@@ -61,6 +61,7 @@ export class LoginComponent implements OnInit {
   }
 
   validateLogin() {
+    this.loader.hideLoader();
     if (SessionManager.getUserSession() != null) {
       this.router.navigate(['/server-list'], {});
     };

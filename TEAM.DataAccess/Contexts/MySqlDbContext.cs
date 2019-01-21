@@ -36,12 +36,13 @@ namespace TEAM.DAL.Contexts
             Database.SetInitializer(new MigrateDatabaseToLatestVersion<MySqlDbContext, Configuration>(nameOrConnectionString));
         }
 
-        public IDbSet<WorkItem> Tasks { get; set; }
+        public IDbSet<UserWorkItem> Tasks { get; set; }
         public IDbSet<UserSession> UserSessionList { get; set; }
         public IDbSet<TeamServer> TeamServers { get; set; }
         public IDbSet<UserInfo> UserInfoList { get; set; }
         public IDbSet<UserLogin> UserLogin { get; set; }
         public IDbSet<UserServerInfo> UserServerInfo { get; set; }
+        public IDbSet<WeekInfo> WeekInfo { get; set; }
 
         /// <summary>
         /// Model creation event to make the relationship between models

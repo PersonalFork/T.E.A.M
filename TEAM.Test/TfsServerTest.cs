@@ -4,12 +4,61 @@ using System;
 using System.Collections.Generic;
 
 using TEAM.Business;
+using TEAM.DAL.Repositories;
+using TEAM.Entity;
 
 namespace TEAM.Test
 {
     [TestClass]
     public class TfsServerTest
     {
+        // Assumes that in current culture week starts on Sunday
+        public int GetWeekOfMonth(DateTimeOffset time)
+        {
+            DateTimeOffset first = new DateTimeOffset(time.Year, time.Month, 1, 0, 0, 0, time.Offset);
+            int firstSunday = (7 - (int)first.DayOfWeek) % 7 + 1;
+            int weekOfMonth = 1 + (time.Day + 7 - firstSunday) / 7;
+
+            return weekOfMonth;
+        }
+
+        [TestMethod]
+        public void GetWeekOfMonth()
+        {
+            DateTime today = DateTime.Today.AddDays(28);
+            int weekOfMonth = GetWeekOfMonth(today);
+        }
+
+        [TestMethod]
+        public void PopulateWeek()
+        {
+            DateTime startDate = DateTime.Today.Date.AddDays(-14);
+            DateTime endDate = startDate.AddDays(6);
+            using (WeekInfoRepository repository = new WeekInfoRepository())
+            {
+                for (int i = 0; i < 200; i++)
+                {
+                    WeekInfo weekInfo = new WeekInfo
+                    {
+                        StartDate = startDate,
+                        EndDate = endDate
+                    };
+                    string label = string.Empty;
+                    label = startDate.ToString("MMM") + "-Week " + GetWeekOfMonth(startDate);
+
+                    if (startDate.Month != endDate.Month)
+                    {
+                        label += " / " + endDate.ToString("MMM") + "-Week 1";
+                    }
+                    weekInfo.Label = label;
+                    //string label = startDate.
+                    repository.Insert(weekInfo);
+                    startDate = startDate.AddDays(7);
+                    endDate = endDate.AddDays(7);
+                }
+            }
+        }
+
         #region Get Work Items.
         [TestMethod]
         public void GetValidItemById()
@@ -23,7 +72,7 @@ namespace TEAM.Test
         public void GetUserIncompleteItems()
         {
             WorkItemManagementService service = new WorkItemManagementService();
-            List<Business.Dto.WorkItemDto> obj = service.GetCurrentUserIncompleteItems(1, "1111111");
+            List<Business.Dto.WorkItemDto> obj = service.GetUserIncompleteItems(1, "1111111");
             Assert.IsTrue(obj.Count > 0);
         }
 
@@ -43,6 +92,13 @@ namespace TEAM.Test
             TeamServerManagementService service = new TeamServerManagementService();
             int id = service.AddTeamServer("TFS OLD", Settings.tfsUrl, 8080);
             Assert.IsTrue(id != 0);
+        }
+
+        [TestMethod]
+        public void GetCurrentWeekTasks()
+        {
+            WorkItemManagementService itemManagementService = new WorkItemManagementService();
+            List<Business.Dto.WorkItemDto> currentWeekTasks = itemManagementService.GetCurrentWeekTasks("1111111");
         }
 
         [TestMethod]

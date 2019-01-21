@@ -4,8 +4,22 @@ app-task-list {
   display: block;
   overflow: hidden;
 }
+.main {
+  height: 100%;
+  overflow: hidden
+}
 
 .table-responsive {
   height: calc(100% - 70px) !important;
   overflow-y: scroll;
+}
+
+.table td {
+  cursor: pointer;
+}
+
+.table tbody > tr.selected > td, .table tbody > tr.selected > th {
+  background-color: red !important;
+  background-color: #0062cc !important;
+  color: white;
 }

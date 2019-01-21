@@ -48,7 +48,8 @@
     <Compile Include="UserLogin.cs" />
     <Compile Include="UserServerInfo.cs" />
     <Compile Include="UserSession.cs" />
-    <Compile Include="WorkItem.cs" />
+    <Compile Include="WeekInfo.cs" />
+    <Compile Include="UserWorkItem.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework">
