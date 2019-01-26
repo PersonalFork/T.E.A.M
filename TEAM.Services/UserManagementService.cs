@@ -19,7 +19,7 @@ namespace TEAM.Business
         #region Private Variable Declarations.
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly TeamServerManagementService _authenticationService;
+        private readonly TfsTeamWorkItemService _authenticationService;
 
         #endregion
 
@@ -27,7 +27,7 @@ namespace TEAM.Business
 
         public UserManagementService()
         {
-            _authenticationService = new TeamServerManagementService();
+            _authenticationService = new TfsTeamWorkItemService();
         }
 
         #endregion

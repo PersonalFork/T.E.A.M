@@ -1,5 +1,6 @@
 ﻿using Microsoft.TeamFoundation.WorkItemTracking.Client;
 
+using TEAM.Business.Common;
 using TEAM.Business.Dto;
 using TEAM.Entity;
 
@@ -43,17 +44,17 @@ namespace TEAM.Business.Extensions
             };
             if (userWorkItem.StartDate != null)
             {
-                dto.StartDate = userWorkItem.StartDate.Value.ToString("dd-MM-yyyy");
+                dto.StartDate = userWorkItem.StartDate.Value.ToString(Constants.DATE_FORMAT);
             }
 
             if (userWorkItem.EndDate != null)
             {
-                dto.EndDate = userWorkItem.EndDate.Value.ToString("dd-MM-yyyy");
+                dto.EndDate = userWorkItem.EndDate.Value.ToString(Constants.DATE_FORMAT);
             }
 
             if (userWorkItem.ETA != null)
             {
-                dto.ETA = userWorkItem.ETA.Value.ToString("dd-MM-yyyy");
+                dto.ETA = userWorkItem.ETA.Value.ToString(Constants.DATE_FORMAT);
             }
             return dto;
         }

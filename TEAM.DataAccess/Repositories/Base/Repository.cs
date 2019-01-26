@@ -175,7 +175,7 @@ namespace TEAM.DAL.Repositories.Base
         {
             if (entity != null)
             {
-                entitySet.AddOrUpdate(entity);
+                entitySet.Add(entity);
                 DataContext.SaveChanges();
                 return entity.Id;
             }
@@ -289,7 +289,12 @@ namespace TEAM.DAL.Repositories.Base
         }
         #endregion
 
-
+        /// <summary>
+        /// Find object from local cache by expression.
+        /// </summary>
+        /// <param name="predicate">Expression.</param>
+        /// <returns></returns>
+        #region
         public T FindLocal(Expression<Func<T, bool>> predicate)
         {
             IEnumerable<T> localResults = entitySet.Local.Where(predicate.Compile());
@@ -299,6 +304,7 @@ namespace TEAM.DAL.Repositories.Base
             }
             return entitySet.FirstOrDefault(predicate);
         }
+        #endregion
 
         /// <summary>
         /// Filter records by criteria
@@ -312,6 +318,12 @@ namespace TEAM.DAL.Repositories.Base
         }
         #endregion
 
+        /// <summary>
+        /// Filter records from cache by criteria.
+        /// </summary>
+        /// <param name="predicate">Condition.</param>
+        /// <returns></returns>
+        #region
         public IQueryable<T> FilterLocal(Expression<Func<T, bool>> predicate)
         {
             IEnumerable<T> localResults = entitySet.Local.Where(predicate.Compile());
@@ -321,6 +333,12 @@ namespace TEAM.DAL.Repositories.Base
             }
             return entitySet.Where(predicate).AsQueryable<T>();
         }
+        #endregion
+
+        //public int Clone(T entity)
+        //{
+        //    DataContext.set
+        //}
 
         /// <summary>
         /// Filter records by criteria and page size

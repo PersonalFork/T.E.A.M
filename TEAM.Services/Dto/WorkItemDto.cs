@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using TEAM.Entity;
 using DTO = TEAM.Business.Dto.Base.Dto;
 
 namespace TEAM.Business.Dto
@@ -31,6 +32,17 @@ namespace TEAM.Business.Dto
             }
         }
 
+        private WorkItemState _state;
+        [JsonProperty("state")]
+        public WorkItemState State
+        {
+            get => _state;
+            set
+            {
+                _state = value;
+                RaisePropertyChanged(nameof(State));
+            }
+        }
 
         private int _taskId;
         [JsonProperty("taskId")]

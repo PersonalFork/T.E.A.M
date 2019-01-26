@@ -221,9 +221,11 @@
   <ItemGroup>
     <Compile Include="Base\ILoginService.cs" />
     <Compile Include="Base\IReportManagementService.cs" />
+    <Compile Include="Base\IWorkItemSyncService.cs" />
     <Compile Include="Base\IWorkItemManagementService.cs" />
-    <Compile Include="Base\ITeamServerManagementService.cs" />
+    <Compile Include="Base\ITeamWorkItemService.cs" />
     <Compile Include="Base\IUserManagementService.cs" />
+    <Compile Include="Common\Constants.cs" />
     <Compile Include="Dto\UserServerDto.cs" />
     <Compile Include="Dto\UserInfoDto.cs" />
     <Compile Include="Dto\UserRegistrationDto.cs" />
@@ -232,8 +234,9 @@
     <Compile Include="LoginService.cs" />
     <Compile Include="ReportManagementService.cs" />
     <Compile Include="Dto\UserLoginDto.cs" />
+    <Compile Include="WorkItemSyncService.cs" />
     <Compile Include="WorkItemManagementService.cs" />
-    <Compile Include="TeamServerManagementService.cs" />
+    <Compile Include="TfsTeamWorkItemService.cs" />
     <Compile Include="UserManagementService.cs" />
     <Compile Include="Dto\Base\Dto.cs" />
     <Compile Include="Dto\WorkItemDto.cs" />

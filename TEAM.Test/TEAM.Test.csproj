@@ -282,6 +282,7 @@
     <Compile Include="TfsServerTest.cs" />
     <Compile Include="LoginTest.cs" />
     <Compile Include="UserManagementTest.cs" />
+    <Compile Include="WorkItemTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

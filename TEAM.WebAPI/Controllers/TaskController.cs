@@ -19,7 +19,7 @@ namespace TEAM.Web.Controllers
     {
         public static readonly ILog _loggger = LogManager.GetLogger(typeof(TaskController));
         private readonly IWorkItemManagementService _workItemManagementService;
-
+        private readonly IWorkItemSyncService _userWorkItemManagementService;
 
         [Dependency]
         public IWorkItemManagementService WorkItemManagementService { get; set; }
@@ -27,7 +27,7 @@ namespace TEAM.Web.Controllers
         public TaskController()
         {
             _workItemManagementService = new WorkItemManagementService();
-            IWorkItemManagementService test = WorkItemManagementService;
+            _userWorkItemManagementService = new WorkItemSyncService();
         }
 
         [Route("getIncompleteTasks")]
@@ -47,7 +47,7 @@ namespace TEAM.Web.Controllers
             }
             try
             {
-                List<WorkItemDto> incompleteWorkItems = _workItemManagementService.GetUserIncompleteItems(serverId, userId);
+                List<WorkItemDto> incompleteWorkItems = _userWorkItemManagementService.GetUserIncompleteSyncedTasks(serverId, userId);
                 return Request.CreateResponse(HttpStatusCode.OK, incompleteWorkItems);
             }
             catch (Exception ex)
@@ -74,7 +74,7 @@ namespace TEAM.Web.Controllers
             }
             try
             {
-                List<WorkItemDto> getCurrentWeekTasks = _workItemManagementService.GetCurrentWeekTasks(userId);
+                List<WorkItemDto> getCurrentWeekTasks = _userWorkItemManagementService.GetUserCurrentWeekSyncedTasks(userId);
                 return Request.CreateResponse(HttpStatusCode.OK, getCurrentWeekTasks);
             }
             catch (Exception ex)

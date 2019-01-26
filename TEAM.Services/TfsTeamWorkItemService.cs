@@ -23,7 +23,7 @@ using WorkItem = Microsoft.TeamFoundation.WorkItemTracking.Client.WorkItem;
 
 namespace TEAM.Business
 {
-    public class TeamServerManagementService : ITeamServerManagementService
+    public class TfsTeamWorkItemService : ITeamWorkItemService
     {
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
@@ -163,7 +163,7 @@ namespace TEAM.Business
 
         #endregion
 
-        #region Task Management.
+        #region Work Item Management.
 
         public List<WorkItem> GetUserIncompleteItems(string serverUrl, string credentialHash)
         {
@@ -298,7 +298,51 @@ namespace TEAM.Business
             return GetWorkItemByQuery(query, serverUrl, credentialHash);
         }
 
-        private List<WorkItem> GetWorkItemByQuery(string query, string serverUrl, string credentialHash)
+        public List<WorkItem> GetWorkItemsByIds(IList<int> workItemId, IList<int> excludeIds, string serverUrl, string credentialHash, bool includeIncompleteItems)
+        {
+            string pendingQuery = string.Empty;
+            string joinCondition = "AND";
+            if (includeIncompleteItems)
+            {
+                joinCondition = " OR";
+                pendingQuery = "AND ([System.State] = 'To Do' OR [System.State] = 'In Progress')";
+            }
+            string includeTasksQuery = string.Empty;
+            if (workItemId.Count > 0)
+            {
+                includeTasksQuery = "[Id] =" + string.Join(" OR [Id] =", workItemId);
+            }
+            if (!string.IsNullOrEmpty(includeTasksQuery))
+            {
+                includeTasksQuery = joinCondition + " (" + includeTasksQuery + ")";
+            }
+
+            string exculdeTasksQuery = string.Empty;
+            if (excludeIds.Count > 0)
+            {
+                exculdeTasksQuery = "[Id] <>" + string.Join(" AND [Id] <> ", excludeIds);
+            }
+            if (!string.IsNullOrEmpty(exculdeTasksQuery))
+            {
+                exculdeTasksQuery = "AND" + " (" + exculdeTasksQuery + ")";
+            }
+
+            if (string.IsNullOrEmpty(includeTasksQuery) && string.IsNullOrEmpty(exculdeTasksQuery) && !includeIncompleteItems)
+            {
+                return new List<WorkItem>();
+            }
+
+            string query = "Select * From WorkItems " +
+                    "Where [System.AssignedTo] = @me " +
+                    pendingQuery +
+                    includeTasksQuery +
+                    exculdeTasksQuery +
+                    " Order By [State] Asc, [Changed Date] Desc";
+
+            return GetWorkItemByQuery(query, serverUrl, credentialHash);
+        }
+
+        public List<WorkItem> GetWorkItemByQuery(string query, string serverUrl, string credentialHash)
         {
             WorkItemCollection col = null;
             try
@@ -337,12 +381,6 @@ namespace TEAM.Business
                 _logger.Error(ex, "Authentication Failure.");
                 throw;
             }
-        }
-
-
-        public List<WorkItem> GetWorkItemsByIds(IList<int> workItemId, IList<int> excludeIds, string serverUrl, string credentialHash, bool includeIncompleteItems)
-        {
-            throw new NotImplementedException();
         }
 
         #endregion

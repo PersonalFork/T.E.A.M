@@ -13,7 +13,7 @@ namespace TEAM.Test
         [TestMethod]
         public void ValidLoginCheck()
         {
-            TeamServerManagementService service = new TeamServerManagementService();
+            TfsTeamWorkItemService service = new TfsTeamWorkItemService();
             bool success = service.Authenticate(Settings.tfsUrl, "jchakraborty", "jchakraborty", "ids");
             Assert.IsTrue(success);
         }
@@ -22,7 +22,7 @@ namespace TEAM.Test
         [ExpectedException(typeof(ServiceUnavailableException))]
         public void InvalidUrlLoginCheck()
         {
-            TeamServerManagementService service = new TeamServerManagementService();
+            TfsTeamWorkItemService service = new TfsTeamWorkItemService();
             service.Authenticate(Settings.tfsUrl + "wrongUrl", "jchakraborty", "jchakraborty", "ids");
         }
 
@@ -30,7 +30,7 @@ namespace TEAM.Test
         [ExpectedException(typeof(TFSAuthenticationException))]
         public void InvalidDomainLoginCheck()
         {
-            TeamServerManagementService service = new TeamServerManagementService();
+            TfsTeamWorkItemService service = new TfsTeamWorkItemService();
             service.Authenticate(Settings.tfsUrl, "jchakraborty", "jchakraborty", "ids1");
         }
 
@@ -38,9 +38,10 @@ namespace TEAM.Test
         [ExpectedException(typeof(TFSAuthenticationException))]
         public void InvalidLoginCheck()
         {
-            TeamServerManagementService service = new TeamServerManagementService();
+            TfsTeamWorkItemService service = new TfsTeamWorkItemService();
             service.Authenticate(Settings.tfsUrl, "jchakraborty", "jchakraborty1", "ids");
         }
+
         #endregion
     }
 }

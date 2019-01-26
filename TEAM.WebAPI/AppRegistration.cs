@@ -10,7 +10,7 @@ namespace TEAM.Web
         private static void RegisterTypes(UnityContainer container)
         {
             container.RegisterType<ILoginService, LoginService>();
-            container.RegisterType<ITeamServerManagementService, TeamServerManagementService>();
+            container.RegisterType<ITeamWorkItemService, TfsTeamWorkItemService>();
         }
     }
 }

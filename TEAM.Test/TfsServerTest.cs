@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 
 using TEAM.Business;
+using TEAM.Business.Base;
 using TEAM.DAL.Repositories;
 using TEAM.Entity;
 
@@ -63,7 +64,7 @@ namespace TEAM.Test
         [TestMethod]
         public void GetValidItemById()
         {
-            WorkItemManagementService service = new WorkItemManagementService();
+            IWorkItemSyncService service = new WorkItemSyncService();
             Business.Dto.WorkItemDto obj = service.GetWorkItemById(200052, 1, "1111111");
             Assert.IsNotNull(obj);
         }
@@ -71,16 +72,15 @@ namespace TEAM.Test
         [TestMethod]
         public void GetUserIncompleteItems()
         {
-            WorkItemManagementService service = new WorkItemManagementService();
-            List<Business.Dto.WorkItemDto> obj = service.GetUserIncompleteItems(1, "1111111");
+            IWorkItemSyncService service = new WorkItemSyncService();
+            List<Business.Dto.WorkItemDto> obj = service.GetUserIncompleteSyncedTasks(1, "1111111");
             Assert.IsTrue(obj.Count > 0);
         }
-
 
         [TestMethod]
         public void GetInvalidItemById()
         {
-            WorkItemManagementService service = new WorkItemManagementService();
+            IWorkItemSyncService service = new WorkItemSyncService();
             Business.Dto.WorkItemDto obj = service.GetWorkItemById(1913745, 5, "1111111");
             Assert.IsNull(obj);
         }
@@ -89,7 +89,7 @@ namespace TEAM.Test
         [TestMethod]
         public void AddTfsServer()
         {
-            TeamServerManagementService service = new TeamServerManagementService();
+            TfsTeamWorkItemService service = new TfsTeamWorkItemService();
             int id = service.AddTeamServer("TFS OLD", Settings.tfsUrl, 8080);
             Assert.IsTrue(id != 0);
         }
@@ -97,15 +97,16 @@ namespace TEAM.Test
         [TestMethod]
         public void GetCurrentWeekTasks()
         {
-            WorkItemManagementService itemManagementService = new WorkItemManagementService();
-            List<Business.Dto.WorkItemDto> currentWeekTasks = itemManagementService.GetCurrentWeekTasks("1111111");
+            IWorkItemSyncService userWorkItemManagementService = new WorkItemSyncService();
+            List<Business.Dto.WorkItemDto> currentWeekTasks = userWorkItemManagementService.GetUserCurrentWeekSyncedTasks("1111111");
+            Assert.IsTrue(currentWeekTasks.Count > 0);
         }
 
         [TestMethod]
         [ExpectedException(typeof(Exception))]
         public void ReAddTfsServer()
         {
-            TeamServerManagementService service = new TeamServerManagementService();
+            TfsTeamWorkItemService service = new TfsTeamWorkItemService();
             int id = service.AddTeamServer("TFS OLD", Settings.tfsUrl, 8080);
             Assert.IsTrue(id != 0);
         }
@@ -113,7 +114,7 @@ namespace TEAM.Test
         [TestMethod]
         public void RemoveTfsServer()
         {
-            TeamServerManagementService service = new TeamServerManagementService();
+            TfsTeamWorkItemService service = new TfsTeamWorkItemService();
             int code = service.DeleteTeamServer(2);
             Assert.IsTrue(code != 0);
         }
