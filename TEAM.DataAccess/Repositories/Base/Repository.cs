@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.Migrations;
+
 using TEAM.Entity.Base;
 
 namespace TEAM.DAL.Repositories.Base
@@ -334,11 +335,6 @@ namespace TEAM.DAL.Repositories.Base
             return entitySet.Where(predicate).AsQueryable<T>();
         }
         #endregion
-
-        //public int Clone(T entity)
-        //{
-        //    DataContext.set
-        //}
 
         /// <summary>
         /// Filter records by criteria and page size

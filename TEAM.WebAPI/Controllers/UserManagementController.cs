@@ -17,11 +17,13 @@ namespace TEAM.WebAPI.Controllers
     public class UserManagementController : ApiController
     {
         public static readonly ILog _loggger = LogManager.GetLogger(typeof(UserManagementController));
+        private readonly ITeamWorkItemService _teamWorkItemService;
         private readonly IUserManagementService _userManagementService;
 
         public UserManagementController()
         {
-            _userManagementService = new UserManagementService();
+            _teamWorkItemService = new TfsTeamWorkItemService();
+            _userManagementService = new UserManagementService(_teamWorkItemService);
         }
 
         [HttpGet]

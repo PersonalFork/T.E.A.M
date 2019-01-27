@@ -3,6 +3,7 @@
 using System;
 
 using TEAM.Business;
+using TEAM.Business.Base;
 using TEAM.Business.Dto;
 using TEAM.Common.Exceptions;
 
@@ -11,6 +12,13 @@ namespace TEAM.Test
     [TestClass]
     public class UserManagementTest
     {
+        private readonly ITeamWorkItemService _teamWorkItemService;
+
+        public UserManagementTest()
+        {
+            _teamWorkItemService = new TfsTeamWorkItemService();
+        }
+
         [TestMethod]
         public void RegisterUser()
         {
@@ -32,7 +40,7 @@ namespace TEAM.Test
                 LoginInfo = userLoginDto,
                 UserInfo = userInfoDto
             };
-            UserManagementService userManagementService = new UserManagementService();
+            UserManagementService userManagementService = new UserManagementService(_teamWorkItemService);
             userManagementService.RegisterUser(userRegistrationDto);
         }
 
@@ -46,7 +54,7 @@ namespace TEAM.Test
         [TestMethod]
         public void AddServer()
         {
-            UserManagementService service = new UserManagementService();
+            UserManagementService service = new UserManagementService(_teamWorkItemService);
             int ret = service.RegisterServer(1, "1111111", Settings.userId, Settings.password, Settings.domain);
             Assert.IsFalse(ret == 0);
         }
@@ -55,14 +63,14 @@ namespace TEAM.Test
         [ExpectedException(typeof(TFSAuthenticationException))]
         public void AddServerWithWrongTFSCredentials()
         {
-            UserManagementService service = new UserManagementService();
+            UserManagementService service = new UserManagementService(_teamWorkItemService);
             service.RegisterServer(4, "1111111", Settings.userId, Settings.password, Settings.domain);
         }
 
         [TestMethod]
         public void GetValidUserServerList()
         {
-            UserManagementService service = new UserManagementService();
+            UserManagementService service = new UserManagementService(_teamWorkItemService);
             System.Collections.Generic.List<UserServerDto> servers = service.GetUserServerList("1111111");
             Assert.IsTrue(servers.Count > 0);
         }

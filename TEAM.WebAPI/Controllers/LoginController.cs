@@ -5,8 +5,6 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Web.Http;
-
-using TEAM.Business;
 using TEAM.Business.Base;
 using TEAM.Business.Dto;
 using TEAM.WebAPI.Common;
@@ -22,9 +20,9 @@ namespace TEAM.WebAPI.Controllers
         //[Dependency]
         //private ILoginService LoginService { get; set; }
 
-        public LoginController()
+        public LoginController(ILoginService loginService)
         {
-            _loginService = new LoginService();
+            _loginService = loginService;
         }
 
         [HttpPost]

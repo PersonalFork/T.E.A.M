@@ -13,6 +13,12 @@ namespace TEAM.Test
     [TestClass]
     public class TfsServerTest
     {
+        private readonly ITeamWorkItemService _teamWorkItemService;
+
+        public TfsServerTest()
+        {
+            _teamWorkItemService = new TfsTeamWorkItemService();
+        }
         // Assumes that in current culture week starts on Sunday
         public int GetWeekOfMonth(DateTimeOffset time)
         {
@@ -64,7 +70,7 @@ namespace TEAM.Test
         [TestMethod]
         public void GetValidItemById()
         {
-            IWorkItemSyncService service = new WorkItemSyncService();
+            IWorkItemSyncService service = new WorkItemSyncService(_teamWorkItemService);
             Business.Dto.WorkItemDto obj = service.GetWorkItemById(200052, 1, "1111111");
             Assert.IsNotNull(obj);
         }
@@ -72,7 +78,7 @@ namespace TEAM.Test
         [TestMethod]
         public void GetUserIncompleteItems()
         {
-            IWorkItemSyncService service = new WorkItemSyncService();
+            IWorkItemSyncService service = new WorkItemSyncService(_teamWorkItemService);
             List<Business.Dto.WorkItemDto> obj = service.GetUserIncompleteSyncedTasks(1, "1111111");
             Assert.IsTrue(obj.Count > 0);
         }
@@ -80,7 +86,7 @@ namespace TEAM.Test
         [TestMethod]
         public void GetInvalidItemById()
         {
-            IWorkItemSyncService service = new WorkItemSyncService();
+            IWorkItemSyncService service = new WorkItemSyncService(_teamWorkItemService);
             Business.Dto.WorkItemDto obj = service.GetWorkItemById(1913745, 5, "1111111");
             Assert.IsNull(obj);
         }
@@ -97,7 +103,7 @@ namespace TEAM.Test
         [TestMethod]
         public void GetCurrentWeekTasks()
         {
-            IWorkItemSyncService userWorkItemManagementService = new WorkItemSyncService();
+            IWorkItemSyncService userWorkItemManagementService = new WorkItemSyncService(_teamWorkItemService);
             List<Business.Dto.WorkItemDto> currentWeekTasks = userWorkItemManagementService.GetUserCurrentWeekSyncedTasks("1111111");
             Assert.IsTrue(currentWeekTasks.Count > 0);
         }

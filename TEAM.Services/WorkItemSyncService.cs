@@ -27,9 +27,9 @@ namespace TEAM.Business
 
         #region Constructor.
 
-        public WorkItemSyncService()
+        public WorkItemSyncService(ITeamWorkItemService teamWorkItemService)
         {
-            _teamServerManagementService = new TfsTeamWorkItemService();
+            _teamServerManagementService = teamWorkItemService;
         }
 
         #endregion

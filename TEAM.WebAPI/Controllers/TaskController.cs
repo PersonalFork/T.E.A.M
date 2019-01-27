@@ -6,10 +6,10 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-using TEAM.Business;
 using TEAM.Business.Base;
 using TEAM.Business.Dto;
 using TEAM.WebAPI.Common;
+
 using Unity.Attributes;
 
 namespace TEAM.Web.Controllers
@@ -18,16 +18,11 @@ namespace TEAM.Web.Controllers
     public class TaskController : ApiController
     {
         public static readonly ILog _loggger = LogManager.GetLogger(typeof(TaskController));
-        private readonly IWorkItemManagementService _workItemManagementService;
-        private readonly IWorkItemSyncService _userWorkItemManagementService;
+        private readonly IWorkItemSyncService _workItemSyncService;
 
-        [Dependency]
-        public IWorkItemManagementService WorkItemManagementService { get; set; }
-
-        public TaskController()
+        public TaskController(IWorkItemSyncService workItemSyncService)
         {
-            _workItemManagementService = new WorkItemManagementService();
-            _userWorkItemManagementService = new WorkItemSyncService();
+            _workItemSyncService = workItemSyncService;
         }
 
         [Route("getIncompleteTasks")]
@@ -47,7 +42,7 @@ namespace TEAM.Web.Controllers
             }
             try
             {
-                List<WorkItemDto> incompleteWorkItems = _userWorkItemManagementService.GetUserIncompleteSyncedTasks(serverId, userId);
+                List<WorkItemDto> incompleteWorkItems = _workItemSyncService.GetUserIncompleteSyncedTasks(serverId, userId);
                 return Request.CreateResponse(HttpStatusCode.OK, incompleteWorkItems);
             }
             catch (Exception ex)
@@ -74,7 +69,7 @@ namespace TEAM.Web.Controllers
             }
             try
             {
-                List<WorkItemDto> getCurrentWeekTasks = _userWorkItemManagementService.GetUserCurrentWeekSyncedTasks(userId);
+                List<WorkItemDto> getCurrentWeekTasks = _workItemSyncService.GetUserCurrentWeekSyncedTasks(userId);
                 return Request.CreateResponse(HttpStatusCode.OK, getCurrentWeekTasks);
             }
             catch (Exception ex)

@@ -19,15 +19,15 @@ namespace TEAM.Business
         #region Private Variable Declarations.
 
         private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly TfsTeamWorkItemService _authenticationService;
+        private readonly ITeamWorkItemService _tfsTeamWorkItemService;
 
         #endregion
 
         #region Constructor.
 
-        public UserManagementService()
+        public UserManagementService(ITeamWorkItemService tfsTeamWorkItemService)
         {
-            _authenticationService = new TfsTeamWorkItemService();
+            _tfsTeamWorkItemService = tfsTeamWorkItemService;
         }
 
         #endregion
@@ -174,7 +174,7 @@ namespace TEAM.Business
                     // Dependency Injection of Team Service.
                     NetworkCredential credential = new NetworkCredential(serverUserId, serverPassword, serverDomain);
                     string hash = JsonConvert.SerializeObject(credential).Encrypt();
-                    _authenticationService.Authenticate(serverId, hash);
+                    _tfsTeamWorkItemService.Authenticate(serverId, hash);
 
                     userServerInfoEntity = new UserServerInfo()
                     {
