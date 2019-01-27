@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AppConfiguration } from '../common/AppConfiguration';
 
 @Injectable({
@@ -7,11 +7,11 @@ import { AppConfiguration } from '../common/AppConfiguration';
 })
 export class UserManagementService {
 
-  constructor(private http: Http) {
+  constructor(private http: HttpClient) {
   }
 
   getServersByUserId() {
-    let options = new Headers();
+    let options = new HttpHeaders();
     options.set('Content-Type', 'application/json');
     let uri: string = AppConfiguration.baseUri + "userMgmt/getServersByUserId";
     return this.http.get(uri);

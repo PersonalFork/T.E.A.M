@@ -12,11 +12,14 @@ namespace TEAM.WebAPI.Filters
     /// </summary>
     public class AuthenticationFailureResult : IHttpActionResult
     {
-        public AuthenticationFailureResult(string reasonPhrase, HttpRequestMessage request)
+        public AuthenticationFailureResult(string reasonPhrase, HttpRequestMessage request, bool isInvalidSession = true)
         {
             ReasonPhrase = reasonPhrase;
             Request = request;
+            IsInvalidSession = isInvalidSession;
         }
+
+        public bool IsInvalidSession { get; private set; }
 
         public string ReasonPhrase { get; private set; }
 
@@ -34,6 +37,10 @@ namespace TEAM.WebAPI.Filters
                 RequestMessage = Request,
                 ReasonPhrase = ReasonPhrase
             };
+            if (IsInvalidSession)
+            {
+                response.Headers.Add("IsInvalidSession", "true");
+            }
             return response;
         }
     }

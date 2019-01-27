@@ -1,8 +1,8 @@
 export class ErrorResponseManager {
   static GetErrorMessageString(errorResponse: Response): string {
-    debugger;
+    debugger
     try {
-      var error = errorResponse.json();
+      var error = errorResponse.error;
       return error["Message"];
     } catch (e) {
       return errorResponse.statusText;

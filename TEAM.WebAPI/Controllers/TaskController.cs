@@ -9,11 +9,11 @@ using System.Web.Http;
 using TEAM.Business.Base;
 using TEAM.Business.Dto;
 using TEAM.WebAPI.Common;
-
-using Unity.Attributes;
+using TEAM.WebAPI.Filters;
 
 namespace TEAM.Web.Controllers
 {
+    [Authentication]
     [RoutePrefix("api/tasks")]
     public class TaskController : ApiController
     {

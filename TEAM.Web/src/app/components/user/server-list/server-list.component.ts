@@ -39,8 +39,8 @@ export class ServerListComponent implements OnInit {
     this.loaderService.showLoader("Loading Server List..");
     this.userManagementService.getServersByUserId()
       .subscribe(
-        response => {
-          this.configuredServers = response.json();
+        (response: Array<UserServerDto>) => {
+          this.configuredServers = response;
           this.loaderService.hideLoader();
         },
         error => {

@@ -28,6 +28,7 @@ export class LoginComponent implements OnInit {
   errorMessage: string = "";
 
   ngOnInit() {
+    this.loader.hideAll();
     this.loader.showLoader("Loading...");
     this.nav.hide();
     this.validateLogin();
@@ -38,8 +39,8 @@ export class LoginComponent implements OnInit {
     this.errorMessage = "";
     this.loginService.login(this.userId, this.password)
       .subscribe(
-        response => {
-          let userSessionResponse = response.json();
+        (response: any) => {
+          let userSessionResponse = response;
           let userSession = new UserSession(
             userSessionResponse.sessionId,
             userSessionResponse.userId,

@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ErrorResponseManager } from '../../../common/ErrorResponseManager';
 import { LoaderService } from '../../../services/loader.service';
+import { NavbarService } from '../../../services/navbar.service';
 import { NotificationService } from '../../../services/notification.service';
 import { TaskService } from './../../../services/task.service';
-import { NavbarService } from '../../../services/navbar.service';
-import { debug } from 'util';
 
 @Component({
   selector: 'app-task-list',
@@ -17,6 +17,7 @@ export class TaskListComponent implements OnInit {
   selectedTask: any;
 
   constructor(
+    private router: Router,
     private navbarService: NavbarService,
     private taskService: TaskService,
     private loaderService: LoaderService,
@@ -30,7 +31,6 @@ export class TaskListComponent implements OnInit {
   }
 
   selectTask(task) {
-    debugger
     this.selectedTask = task;
   }
 
@@ -39,8 +39,8 @@ export class TaskListComponent implements OnInit {
     this.loaderService.showLoader("Loading Tasks from Server... This will take some time.");
     this.taskService.getCurrentWeekTasks()
       .subscribe(
-        result => {
-          this.tasks = result.json();
+        (result: Array<any>) => {
+          this.tasks = result;
           this.loaderService.hideLoader();
         },
         error => {
@@ -54,8 +54,8 @@ export class TaskListComponent implements OnInit {
   getMyIncompleteTasks() {
     this.taskService.getMyIncompleteTasks()
       .subscribe(
-        result => {
-          this.tasks = result.json();
+        (result:any[]) => {
+          this.tasks = result;
         },
         error => {
         }

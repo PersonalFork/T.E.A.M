@@ -226,6 +226,7 @@
     <Compile Include="Base\ITeamWorkItemService.cs" />
     <Compile Include="Base\IUserManagementService.cs" />
     <Compile Include="Common\Constants.cs" />
+    <Compile Include="Dto\TeamServerDto.cs" />
     <Compile Include="Dto\UserServerDto.cs" />
     <Compile Include="Dto\UserInfoDto.cs" />
     <Compile Include="Dto\UserRegistrationDto.cs" />

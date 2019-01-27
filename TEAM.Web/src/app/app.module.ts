@@ -1,13 +1,18 @@
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { ManageRolesComponent } from './components/admin/manage-roles/manage-roles.component';
 import { ManageUserComponent } from './components/admin/manage-user/manage-user.component';
 import { UserListComponent } from './components/admin/user-list/user-list.component';
 import { FooterComponent } from './components/common/footer/footer.component';
+import { LoaderComponent } from './components/common/loader/loader.component';
 import { NavBarComponent } from './components/common/nav-bar/nav-bar.component';
+import { NotificationComponent } from './components/common/notification/notification.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DashboardService } from './components/dashboard/dashboard.service';
 import { AddTaskComponent } from './components/task/add-task/add-task.component';
@@ -18,13 +23,10 @@ import { ForgotPasswordComponent } from './components/user/forgot-password/forgo
 import { LoginComponent } from './components/user/login/login.component';
 import { LogoutComponent } from './components/user/logout/logout.component';
 import { RegisterComponent } from './components/user/register/register.component';
-import { TaskService } from './services/task.service';
-import { HttpModule } from '@angular/http';
 import { ServerListComponent } from './components/user/server-list/server-list.component';
 import { DropdownDirective } from './directives/dropdown.directive';
-import { LoaderComponent } from './components/common/loader/loader.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NotificationComponent } from './components/common/notification/notification.component';
+import { AuthenticationInterceptor } from './interceptors/authenticationInterceptor';
+import { TaskService } from './services/task.service';
 
 @NgModule({
   declarations: [
@@ -51,7 +53,7 @@ import { NotificationComponent } from './components/common/notification/notifica
   imports: [
     BrowserModule,
     FormsModule,
-    HttpModule,
+    HttpClientModule,
     NgbModule.forRoot(),
     RouterModule.forRoot([
       {
@@ -108,7 +110,12 @@ import { NotificationComponent } from './components/common/notification/notifica
   ],
   providers: [
     DashboardService,
-    TaskService
+    TaskService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthenticationInterceptor,
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
