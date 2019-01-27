@@ -11,15 +11,12 @@ export class AuthenticationInterceptor implements HttpInterceptor {
 
   constructor(
     private notificationService: NotificationService,
-    private router: Router
-  ) {
-
+    private router: Router) {
   }
 
   intercept(req: HttpRequest<any>, next: HttpHandler):
     Observable<HttpEvent<any>> {
     // handle the response.
-    debugger;
     return next.handle(req)
       .pipe(
         catchError((err, caught: Observable<HttpEvent<any>>) => {

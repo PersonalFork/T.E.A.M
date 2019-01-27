@@ -1,5 +1,7 @@
+import { HttpErrorResponse } from "@angular/common/http";
+
 export class ErrorResponseManager {
-  static GetErrorMessageString(errorResponse: Response): string {
+  static GetErrorMessageString(errorResponse: HttpErrorResponse): string {
     debugger
     try {
       var error = errorResponse.error;

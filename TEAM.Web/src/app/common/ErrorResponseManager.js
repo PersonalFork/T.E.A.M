@@ -6,7 +6,7 @@ var ErrorResponseManager = /** @class */ (function () {
     ErrorResponseManager.GetErrorMessageString = function (errorResponse) {
         debugger;
         try {
-            var error = errorResponse.json();
+            var error = errorResponse.error;
             return error["Message"];
         }
         catch (e) {
